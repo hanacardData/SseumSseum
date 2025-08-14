@@ -1,0 +1,44 @@
+annotated-types @ file:///C:/b/abs_0dmaoyhhj3/croot/annotated-types_1709542968311/work
+anyio @ file:///C:/b/abs_5c8w79vk0u/croot/anyio_1745334672105/work
+certifi==2025.8.3
+cffi==1.17.1
+cfgv==3.4.0
+charset-normalizer==3.4.3
+click @ file:///C:/b/abs_bbg7qqz4dk/croot/click_1754477951021/work
+colorama @ file:///C:/Users/dev-admin/perseverance-python-buildout/croot/colorama_1699472650914/work
+cryptography==45.0.6
+decorator==5.2.1
+distlib==0.4.0
+distro==1.9.0
+fastapi @ file:///C:/b/abs_96d9k5nptn/croot/fastapi_1724789169469/work
+filelock==3.18.0
+h11 @ file:///C:/b/abs_224rqu7kel/croot/h11_1748442031959/work
+httpcore==1.0.9
+httpx==0.28.1
+identify==2.6.13
+idna @ file:///C:/b/abs_aad84bnnw5/croot/idna_1714398896795/work
+jiter==0.10.0
+nodeenv==1.9.1
+openai==1.99.9
+platformdirs==4.3.8
+pre_commit==4.3.0
+py==1.11.0
+pycparser==2.22
+pydantic @ file:///C:/b/abs_d1rp6fqxgk/croot/pydantic_1750768285689/work
+pydantic-settings==2.10.1
+pydantic_core @ file:///C:/b/abs_d0xs0z3erk/croot/pydantic-core_1750754747982/work
+PyJWT==2.10.1
+python-dotenv==1.1.1
+PyYAML==6.0.2
+requests==2.32.4
+retry==0.9.2
+setuptools==78.1.1
+sniffio @ file:///C:/b/abs_3akdewudo_/croot/sniffio_1705431337396/work
+starlette @ file:///C:/b/abs_584arzjt6c/croot/starlette-recipe_1724683216853/work
+tqdm==4.67.1
+typing-inspection @ file:///C:/b/abs_261c5jt6kx/croot/typing-inspection_1746023491500/work
+typing_extensions @ file:///C:/b/abs_0ffjxtihug/croot/typing_extensions_1734714875646/work
+urllib3==2.5.0
+uvicorn @ file:///C:/b/abs_e17rwqwbyy/croot/uvicorn-split_1751615749218/work
+virtualenv==20.34.0
+wheel==0.45.1
