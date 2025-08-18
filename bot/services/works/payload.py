@@ -1,4 +1,5 @@
 from bot.services.steps_enum import Channel, Purpose, Start
+from bot.services.works.written_message import CHANNEL, PURPOSE
 
 
 def set_text_payload(message: str) -> dict[str, dict[str, str]]:
@@ -35,7 +36,7 @@ def set_channel_button_payload():
     return {
         "content": {
             "type": "button_template",
-            "contentText": "첫번째로, 카피를 담을 채널을 선택해주세요!",
+            "contentText": CHANNEL,
             "actions": [
                 {
                     "type": "message",
@@ -62,7 +63,7 @@ def set_campagin_purpose_button_payload():
     return {
         "content": {
             "type": "button_template",
-            "contentText": "두번째로, 캠페인 목적을 선택해주세요!",
+            "contentText": PURPOSE,
             "actions": [
                 {
                     "type": "message",
