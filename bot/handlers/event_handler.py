@@ -17,28 +17,17 @@ class BotStatus(str, Enum):
 async def process_event(data: dict) -> JSONResponse:
     event_type: str = data.get("type")
     source: dict = data.get("source", {})
-    channel_id: str = source.get("channelId")
     user_id: str = source.get("userId")
 
-    if event_type == "join":
-        await post_to_works(
-            payload=set_text_payload(
-                "안녕하세요, 현재 개발중인 카피라이터 씀씀이 봇입니다. 단체방은 서비스하고 있지 않아요."
-            ),
-            id=channel_id,
-            is_channel=True,
-        )
-        return JSONResponse(status_code=200, content={"status": BotStatus.OK})
+    if event_type != "message":
+        return JSONResponse(status_code=200, content={"status": BotStatus.IGNORED})
 
-    if event_type == "message":
-        content = data.get("content", {})
-        text = content.get("text", "")
-        response = await get_openai_response(
-            prompt="어떤 말을 들어도 지금은 봇 개발중이니까 대답할 수 없고 창의적인 농담을 답변으로 하도록 해.",
-            input=text,
-        )
-        if user_id:
-            await post_to_works(payload=set_text_payload(response), id=user_id)
-            return JSONResponse(status_code=200, content={"status": BotStatus.OK})
+    content = data.get("content", {})
+    text = content.get("text", "")
+    response = await get_openai_response(
+        prompt="어떤 말을 들어도 지금은 봇 개발중이니까 대답할 수 없고 창의적인 농담을 답변으로 하도록 해.",
+        input=text,
+    )
 
-    return JSONResponse(status_code=200, content={"status": BotStatus.IGNORED})
+    await post_to_works(payload=set_text_payload(response), id=user_id)
+    return JSONResponse(status_code=200, content={"status": BotStatus.OK})
