@@ -11,20 +11,33 @@ from bot.services.works.payload import (
     set_text_payload,
 )
 from bot.services.works.post_content import post_to_works
-from bot.services.works.written_message import DESCRIPTION, TARGET
+from bot.services.works.written_message import DESCRIPTION, GREETINGS, START, TARGET
 
 _VALID_OPTIONS = set(item.value for item in Channel) | set(
     item.value for item in Purpose
 )
 
 
-async def initial_contact(user_id: str) -> None:
+async def initial_contact_event(user_id: str) -> None:
     upsert_session(user_id=user_id, step=Step.START.value, context={})
     await post_to_works(
-        payload=set_text_payload("어떤 문구가 고민이신가요? 씀씀이와 함께 써봐요!"),
+        payload=set_text_payload(GREETINGS),
         id=user_id,
     )
     await post_to_works(payload=set_initial_image_carousel_payload(), id=user_id)
+
+
+async def start_event(user_id: str) -> None:
+    upsert_session(
+        user_id=user_id,
+        step=Step.GENERATE.value,
+        context={},
+    )
+    await post_to_works(
+        payload=set_text_payload(START),
+        id=user_id,
+    )
+    await post_to_works(payload=set_channel_button_payload(), id=user_id)
 
 
 async def process_event(data: dict) -> JSONResponse:
@@ -40,21 +53,10 @@ async def process_event(data: dict) -> JSONResponse:
     user_info = get_session(user_id)
 
     if text.startswith("시작하기") or bool(user_info is None):
-        await initial_contact(user_id=user_id)
+        await initial_contact_event(user_id=user_id)
         return JSONResponse(status_code=200, content={"status": BotStatus.OK})
     elif user_info["step"] == Step.START.value and text == Start.COPY_GENERATE.value:
-        upsert_session(
-            user_id=user_id,
-            step=Step.GENERATE.value,
-            context={},
-        )
-        await post_to_works(
-            payload=set_text_payload(
-                "좋아요! 씀씀이와 함께 카피를 만들어볼까요? 4단계만 거치면 바로 완성돼요!"
-            ),
-            id=user_id,
-        )
-        await post_to_works(payload=set_channel_button_payload(), id=user_id)
+        await start_event(user_id=user_id)
         return JSONResponse(status_code=200, content={"status": BotStatus.OK})
     elif (
         user_info["step"] == Step.GENERATE.value and text in Channel._value2member_map_
@@ -81,6 +83,8 @@ async def process_event(data: dict) -> JSONResponse:
         context[Step.DESCRIPTION.value] = text
         upsert_session(user_id=user_id, step=Step.DESCRIPTION.value, context=context)
         await post_to_works(payload=set_text_payload(str(context)), id=user_id)
+
+        await initial_contact_event(user_id=user_id)  # loop 처리
         return JSONResponse(status_code=200, content={"status": BotStatus.OK})
 
     else:
