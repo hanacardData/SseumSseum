@@ -24,6 +24,7 @@ async def process_event(data: dict) -> JSONResponse:
 
     content = data.get("content", {})
     text = content.get("text", "")
+
     response = await get_openai_response(
         prompt="어떤 말을 들어도 지금은 봇 개발중이니까 대답할 수 없고 창의적인 농담을 답변으로 하도록 해.",
         input=text,
