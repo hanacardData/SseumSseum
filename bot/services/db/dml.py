@@ -46,7 +46,7 @@ def get_session(user_id: str) -> dict[str, str] | None:
         SELECT
             step,
             context,
-            update_at
+            updated_at
         FROM session
         WHERE user_id = ?
         """,
