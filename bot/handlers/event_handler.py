@@ -11,7 +11,7 @@ from bot.services.works.payload import (
     set_text_payload,
 )
 from bot.services.works.post_content import post_to_works
-from bot.services.works.written_message import CAMPAIGN_DESCRIPTION, TARGET
+from bot.services.works.written_message import DESCRIPTION, TARGET
 
 
 async def initial_contact(user_id: str) -> None:
@@ -70,7 +70,7 @@ async def process_event(data: dict) -> JSONResponse:
         context = user_info["context"]
         context[Step.TARGET.value] = text
         upsert_session(user_id=user_id, step=Step.TARGET.value, context=context)
-        await post_to_works(payload=set_text_payload(CAMPAIGN_DESCRIPTION), id=user_id)
+        await post_to_works(payload=set_text_payload(DESCRIPTION), id=user_id)
         return JSONResponse(status_code=200, content={"status": BotStatus.OK})
     elif user_info["step"] == Step.TARGET.value:
         context = user_info["context"]
