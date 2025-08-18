@@ -13,6 +13,10 @@ from bot.services.works.payload import (
 from bot.services.works.post_content import post_to_works
 from bot.services.works.written_message import DESCRIPTION, TARGET
 
+_VALID_OPTIONS = set(item.value for item in Channel) | set(
+    item.value for item in Purpose
+)
+
 
 async def initial_contact(user_id: str) -> None:
     upsert_session(user_id=user_id, step=Step.START.value, context={})
@@ -66,13 +70,13 @@ async def process_event(data: dict) -> JSONResponse:
         upsert_session(user_id=user_id, step=Step.PURPOSE.value, context=context)
         await post_to_works(payload=set_text_payload(TARGET), id=user_id)
         return JSONResponse(status_code=200, content={"status": BotStatus.OK})
-    elif user_info["step"] == Step.PURPOSE.value:
+    elif user_info["step"] == Step.PURPOSE.value and text not in _VALID_OPTIONS:
         context = user_info["context"]
         context[Step.TARGET.value] = text
         upsert_session(user_id=user_id, step=Step.TARGET.value, context=context)
         await post_to_works(payload=set_text_payload(DESCRIPTION), id=user_id)
         return JSONResponse(status_code=200, content={"status": BotStatus.OK})
-    elif user_info["step"] == Step.TARGET.value:
+    elif user_info["step"] == Step.TARGET.value and text not in _VALID_OPTIONS:
         context = user_info["context"]
         context[Step.DESCRIPTION.value] = text
         upsert_session(user_id=user_id, step=Step.DESCRIPTION.value, context=context)
