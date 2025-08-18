@@ -1,7 +1,7 @@
 import httpx
-from logger import logger
 from retry import retry
 
+from bot.logger import logger
 from bot.services.works.access_token import set_headers
 from bot.services.works.variables import CHANNEL_POST_URL, USER_POST_URL
 

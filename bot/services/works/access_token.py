@@ -4,9 +4,9 @@ from logging import Logger
 import jwt
 import requests
 from cryptography.hazmat.primitives import serialization
-from logger import logger
 
 from bot.config.settings import settings
+from bot.logger import logger
 
 
 class TokenManager:

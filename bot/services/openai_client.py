@@ -1,8 +1,8 @@
-from logger import logger
 from openai import APIConnectionError, AsyncOpenAI
 from retry import retry
 
 from bot.config.settings import settings
+from bot.logger import logger
 
 client = AsyncOpenAI(api_key=settings.openai_api_key)
 
