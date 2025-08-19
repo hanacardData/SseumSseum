@@ -1,43 +1,17 @@
 from fastapi.responses import JSONResponse
 
 from bot.handlers.bot_status import BotStatus
-from bot.services.db.dml import get_session, upsert_session
+from bot.handlers.steps.channel import handle_channel_selection_event
+from bot.handlers.steps.description import handle_description_input_event
+from bot.handlers.steps.purpose import handle_purpose_selection_event
+from bot.handlers.steps.start import handle_start_event
+from bot.handlers.steps.target import handle_target_input_event
+from bot.handlers.steps.task_selection import handle_task_selection_event
+from bot.services.db.dml import get_session
 from bot.services.openai_client import get_openai_response
-from bot.services.steps_enum import Channel, Purpose, Start, Step
-from bot.services.works.payload import (
-    set_campagin_purpose_button_payload,
-    set_channel_button_payload,
-    set_initial_image_carousel_payload,
-    set_text_payload,
-)
+from bot.services.steps_enum import INITIAL_CONTACT, Step
+from bot.services.works.payload import set_text_payload
 from bot.services.works.post_content import post_to_works
-from bot.services.works.written_message import DESCRIPTION, GREETINGS, START, TARGET
-
-_VALID_OPTIONS = set(item.value for item in Channel) | set(
-    item.value for item in Purpose
-)
-
-
-async def initial_contact_event(user_id: str) -> None:
-    upsert_session(user_id=user_id, step=Step.START.value, context={})
-    await post_to_works(
-        payload=set_text_payload(GREETINGS),
-        id=user_id,
-    )
-    await post_to_works(payload=set_initial_image_carousel_payload(), id=user_id)
-
-
-async def start_event(user_id: str) -> None:
-    upsert_session(
-        user_id=user_id,
-        step=Step.GENERATE.value,
-        context={},
-    )
-    await post_to_works(
-        payload=set_text_payload(START),
-        id=user_id,
-    )
-    await post_to_works(payload=set_channel_button_payload(), id=user_id)
 
 
 async def process_event(data: dict) -> JSONResponse:
@@ -50,43 +24,28 @@ async def process_event(data: dict) -> JSONResponse:
 
     content = data.get("content", {})
     text: str = content.get("text", "")
-    user_info = get_session(user_id)
-
-    if text.startswith("시작하기") or bool(user_info is None):
-        await initial_contact_event(user_id=user_id)
-        return JSONResponse(status_code=200, content={"status": BotStatus.OK})
-    elif user_info["step"] == Step.START.value and text == Start.COPY_GENERATE.value:
-        await start_event(user_id=user_id)
-        return JSONResponse(status_code=200, content={"status": BotStatus.OK})
-    elif (
-        user_info["step"] == Step.GENERATE.value and text in Channel._value2member_map_
-    ):
-        context = user_info["context"]
-        context[Step.CHANNEL.value] = text
-        upsert_session(user_id=user_id, step=Step.CHANNEL.value, context=context)
-        await post_to_works(payload=set_campagin_purpose_button_payload(), id=user_id)
-        return JSONResponse(status_code=200, content={"status": BotStatus.OK})
-    elif user_info["step"] == Step.CHANNEL.value and text in Purpose._value2member_map_:
-        context = user_info["context"]
-        context[Step.PURPOSE.value] = text
-        upsert_session(user_id=user_id, step=Step.PURPOSE.value, context=context)
-        await post_to_works(payload=set_text_payload(TARGET), id=user_id)
-        return JSONResponse(status_code=200, content={"status": BotStatus.OK})
-    elif user_info["step"] == Step.PURPOSE.value and text not in _VALID_OPTIONS:
-        context = user_info["context"]
-        context[Step.TARGET.value] = text
-        upsert_session(user_id=user_id, step=Step.TARGET.value, context=context)
-        await post_to_works(payload=set_text_payload(DESCRIPTION), id=user_id)
-        return JSONResponse(status_code=200, content={"status": BotStatus.OK})
-    elif user_info["step"] == Step.TARGET.value and text not in _VALID_OPTIONS:
-        context = user_info["context"]
-        context[Step.DESCRIPTION.value] = text
-        upsert_session(user_id=user_id, step=Step.DESCRIPTION.value, context=context)
-        await post_to_works(payload=set_text_payload(str(context)), id=user_id)
-
-        await initial_contact_event(user_id=user_id)  # loop 처리
+    session = get_session(user_id)
+    step = session.get("step", None)
+    if text == INITIAL_CONTACT or not session or not step:
+        await handle_start_event(user_id=user_id)
         return JSONResponse(status_code=200, content={"status": BotStatus.OK})
 
+    event_handler_map = {
+        Step.START.value: handle_task_selection_event,
+        Step.TASK_SELECTION.value: handle_channel_selection_event,
+        Step.CHANNEL.value: handle_purpose_selection_event,
+        Step.PURPOSE.value: handle_target_input_event,
+        Step.TARGET.value: handle_description_input_event,
+    }
+
+    if step == Step.START.value:
+        await handle_task_selection_event(user_id=user_id, session=session, text=text)
+        return JSONResponse(status_code=200, content={"status": BotStatus.OK})
+
+    event_handler = event_handler_map.get(step)
+    if event_handler:
+        await event_handler(user_id=user_id, session=session, text=text)
+        return JSONResponse(status_code=200, content={"status": BotStatus.OK})
     else:
         response = await get_openai_response(
             prompt="어떤 말을 들어도 지금은 봇 개발중이니까 대답할 수 없고 창의적인 농담을 답변으로 하도록 해.",

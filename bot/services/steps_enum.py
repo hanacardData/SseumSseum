@@ -1,16 +1,18 @@
 from enum import Enum
 
+INITIAL_CONTACT: str = "시작하기"
+
 
 class Step(str, Enum):
     START = "start"
-    GENERATE = "generate"
+    TASK_SELECTION = "task_selection"
     CHANNEL = "channel"
     PURPOSE = "purpose"
     TARGET = "target"
     DESCRIPTION = "description"
 
 
-class Start(str, Enum):
+class TaskSelection(str, Enum):
     COPY_GENERATE = "카피 생성하기"
     COPY_FIX = "카피 다듬기"
 
@@ -20,6 +22,7 @@ class Channel(str, Enum):
     LMS = "LMS"
     SMS = "SMS"
     TALK = "알림톡"
+    PREV = "생성 단계로 돌아가기"
 
 
 class Purpose(str, Enum):
@@ -32,3 +35,4 @@ class Purpose(str, Enum):
     EVENT_JOIN = "이벤트 응모"
     SURVEY = "만족도 조사"
     PRODUCT_RECOMMEND = "특정 상품 권유"
+    PREV = "채널 선택 단계로 돌아가기"
