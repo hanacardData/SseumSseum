@@ -1,4 +1,5 @@
 from bot.handlers.steps.start import handle_start_event
+from bot.services.copywriter.get_copy import suggest_copy, suggest_tone_strategy
 from bot.services.db.dml import upsert_session
 from bot.services.steps_enum import Step
 from bot.services.works.payload import set_text_payload
@@ -17,5 +18,20 @@ async def handle_description_input_event(
     context[Step.DESCRIPTION.value] = text
     upsert_session(user_id=user_id, step=Step.DESCRIPTION.value, context=context)
     await post_to_works(payload=set_text_payload(str(context)), id=user_id)
-    # FIXME: 생성하기 로직
+    tone_strategy = await suggest_tone_strategy(context)
+    await post_to_works(
+        payload=set_text_payload(tone_strategy["tone_thoughts"]), id=user_id
+    )
+    await post_to_works(
+        payload=set_text_payload(tone_strategy["strategy_thoughts"]), id=user_id
+    )
+    result = await suggest_copy(
+        task_info=context,
+        tone=tone_strategy["tone"],
+        strategy=tone_strategy["strategy"],
+    )
+    await post_to_works(
+        payload=set_text_payload(result),
+        id=user_id,
+    )
     await handle_start_event(user_id=user_id)  # loop 처리
