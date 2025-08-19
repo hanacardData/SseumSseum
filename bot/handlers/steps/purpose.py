@@ -1,8 +1,8 @@
-from bot.handlers.steps.task_selection import post_channel_selection_message
 from bot.services.db.dml import upsert_session
 from bot.services.steps_enum import Purpose, Step
 from bot.services.works.payload import (
     set_campagin_purpose_button_payload,
+    set_channel_button_payload,
     set_text_payload,
 )
 from bot.services.works.post_content import post_to_works
@@ -19,7 +19,7 @@ async def handle_purpose_selection_event(
     if text == Purpose.PREV.value:
         context = session["context"]
         context.pop(Step.CHANNEL.value, None)
-        await post_channel_selection_message(user_id=user_id)
+        await post_to_works(payload=set_channel_button_payload(), id=user_id)
         upsert_session(user_id=user_id, step=Step.TASK_SELECTION.value, context=context)
         return
 

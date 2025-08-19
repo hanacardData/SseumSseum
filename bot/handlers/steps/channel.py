@@ -26,6 +26,8 @@ async def handle_channel_selection_event(
         await post_to_works(payload=set_campagin_purpose_button_payload(), id=user_id)
     else:
         await post_to_works(
-            payload=set_channel_button_payload("잘못된 입력입니다. 다시 시도해주세요."),
+            payload=set_channel_button_payload(
+                "잘못된 입력입니다. 채널을 다시 입력해주세요."
+            ),
             id=user_id,
         )
