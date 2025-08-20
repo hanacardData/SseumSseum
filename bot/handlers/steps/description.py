@@ -23,10 +23,10 @@ async def handle_description_input_event(
     # await post_to_works(payload=set_text_payload(str(context)), id=user_id) # 디버깅용
     tone_strategy = await suggest_tone_strategy(context)
     await post_to_works(
-        payload=set_text_payload(f"({tone_strategy.tone_thoughts})"), id=user_id
+        payload=set_text_payload(tone_strategy.tone_thoughts), id=user_id
     )
     await post_to_works(
-        payload=set_text_payload(f"({tone_strategy.strategy_thoughts})"), id=user_id
+        payload=set_text_payload(tone_strategy.strategy_thoughts), id=user_id
     )
     suggest_copy_dict = await suggest_copy(
         task_info=context,
