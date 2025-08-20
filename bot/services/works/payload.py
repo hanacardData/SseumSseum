@@ -1,3 +1,5 @@
+import json
+
 from bot.services.steps_enum import Channel, Purpose, TaskSelection
 from bot.services.works.written_message import CHANNEL, PURPOSE
 
@@ -110,5 +112,69 @@ def set_campagin_purpose_button_payload(content_text: str = PURPOSE) -> dict[str
                     "label": Purpose.PREV.value,
                 },
             ],
+        }
+    }
+
+
+def set_copy_result_payload(phrases: dict):
+    carousel_payload = {"type": "carousel", "contents": []}
+
+    for _, phrase in phrases.items():
+        bubble = {
+            "type": "bubble",
+            "size": "kilo",
+            "header": {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                    {
+                        "type": "text",
+                        "text": phrase["title"],
+                        "wrap": True,
+                        "weight": "bold",
+                        "size": "sm",
+                        "color": "#000000",
+                    }
+                ],
+            },
+            "body": {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                    {
+                        "type": "text",
+                        "text": phrase["content"],
+                        "wrap": True,
+                        "size": "sm",
+                        "color": "#000000",
+                    }
+                ],
+            },
+            "footer": {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                    {
+                        "type": "text",
+                        "text": "저장하기",
+                        "action": {
+                            "type": "postback",
+                            "data": json.dumps(phrase, ensure_ascii=False),
+                        },
+                        "size": "sm",
+                        "align": "center",
+                        "style": "normal",
+                        "color": "#157efb",
+                    }
+                ],
+            },
+        }
+
+        carousel_payload["contents"].append(bubble)
+    return {
+        "content": {
+            "type": "flex",
+            "altText": "카피 생성 결과",
+            "contents": carousel_payload,
         }
     }

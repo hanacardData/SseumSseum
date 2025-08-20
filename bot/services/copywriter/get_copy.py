@@ -1,6 +1,7 @@
 import random
 
 from pydantic import BaseModel, Field, field_validator
+from retry import retry
 
 from bot.logger import logger
 from bot.services.copywriter.prompt.copytone import COPY_TONE_MAPPER
@@ -81,6 +82,9 @@ async def suggest_tone_strategy(task_info: dict) -> SuggestionResult:
     try:
         result = await get_openai_response(prompt=prompt, input=prompt)
         parsed = parse_json(result)
+        if not parsed:
+            logger.error("Failed to parse OpenAI response.")
+            raise Exception("Parsing error in OpenAI response.")
         suggestion = SuggestionResult(**parsed)
         return suggestion
     except Exception as e:
@@ -91,7 +95,8 @@ async def suggest_tone_strategy(task_info: dict) -> SuggestionResult:
         )
 
 
-async def suggest_copy(task_info: dict, tone: str, strategy: str) -> str:
+@retry(tries=3, delay=1, backoff=2, exceptions=Exception)
+async def suggest_copy(task_info: dict, tone: str, strategy: str) -> dict | None:
     """입력 텍스트에 어울리는 카피를 생성합니다."""
     copy_tone_prompt = COPY_TONE_MAPPER[tone]
     copy_strategy_prompt = COPY_STRATEGY_MAPPER[strategy]
@@ -109,7 +114,12 @@ async def suggest_copy(task_info: dict, tone: str, strategy: str) -> str:
             prompt="You are a helpful marketer.",
             input=prompt,
         )
+        result = parse_json(result)
+        if not result:
+            logger.error("Failed to parse OpenAI response.")
+            raise Exception("Parsing error in OpenAI response.")
         return result
+
     except Exception as e:
         logger.error(f"Error in suggest_copy: {e}")
-        return "카피 생성에 실패했습니다. 다시 시도해주세요."
+        return

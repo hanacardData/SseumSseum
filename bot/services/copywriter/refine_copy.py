@@ -1,6 +1,8 @@
 import json
 import re
 
+from bot.logger import logger
+
 
 def parse_json(response_text: str) -> dict:
     """
@@ -11,11 +13,17 @@ def parse_json(response_text: str) -> dict:
     ```
     이런 코드블록도 처리 가능.
     """
-    # ```json ... ``` 또는 ``` ... ``` 제거
-    cleaned = re.sub(r"```(?:json)?\n?(.*?)```", r"\1", response_text, flags=re.DOTALL)
+    try:
+        # ```json ... ``` 또는 ``` ... ``` 제거
+        cleaned = re.sub(
+            r"```(?:json)?\n?(.*?)```", r"\1", response_text, flags=re.DOTALL
+        )
 
-    # 앞뒤 공백 제거
-    cleaned = cleaned.strip()
+        # 앞뒤 공백 제거
+        cleaned = cleaned.strip()
 
-    # JSON 파싱
-    return json.loads(cleaned)
+        # JSON 파싱
+        return json.loads(cleaned)
+    except Exception as e:
+        logger.error(f"Failed to parse JSON from response: {e}")
+        return

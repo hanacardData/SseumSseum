@@ -2,7 +2,7 @@ from bot.handlers.steps.start import handle_start_event
 from bot.services.copywriter.get_copy import suggest_copy, suggest_tone_strategy
 from bot.services.db.dml import upsert_session
 from bot.services.steps_enum import Step
-from bot.services.works.payload import set_text_payload
+from bot.services.works.payload import set_copy_result_payload, set_text_payload
 from bot.services.works.post_content import post_to_works
 
 
@@ -28,13 +28,24 @@ async def handle_description_input_event(
     await post_to_works(
         payload=set_text_payload(f"({tone_strategy.strategy_thoughts})"), id=user_id
     )
-    result = await suggest_copy(
+    suggest_copy_dict = await suggest_copy(
         task_info=context,
         tone=tone_strategy.tone,
         strategy=tone_strategy.strategy,
     )
+    if not suggest_copy_dict:
+        await post_to_works(
+            payload=set_text_payload(
+                "카피 생성에 실패했어요. 다시 시도해주세요."
+                + "만약 오류가 반복된다면 데이터 사업부에 문의해주세요."
+            ),
+            id=user_id,
+        )
+        await handle_start_event(user_id=user_id)  # loop 처리
+        return
+
     await post_to_works(
-        payload=set_text_payload(result),
+        payload=set_copy_result_payload(suggest_copy_dict),
         id=user_id,
     )
     await handle_start_event(user_id=user_id)  # loop 처리
