@@ -170,8 +170,8 @@ def set_copy_result_payload(copy_result: dict):
                 ],
             },
         }
-
         carousel_payload["contents"].append(bubble)
+
     return {
         "content": {
             "type": "flex",

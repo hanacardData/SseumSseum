@@ -1,4 +1,5 @@
 from bot.handlers.steps.start import handle_start_event
+from bot.logger import logger
 from bot.services.copywriter.get_copy import suggest_copy, suggest_tone_strategy
 from bot.services.db.dml import upsert_session
 from bot.services.steps_enum import Step
@@ -41,11 +42,20 @@ async def handle_description_input_event(
             ),
             id=user_id,
         )
-        await handle_start_event(user_id=user_id)  # loop 처리
+        await handle_start_event(user_id=user_id)
         return
 
-    await post_to_works(
-        payload=set_copy_result_payload(suggest_copy_dict),
-        id=user_id,
-    )
-    await handle_start_event(user_id=user_id)  # loop 처리
+    try:
+        await post_to_works(
+            payload=set_copy_result_payload(suggest_copy_dict),
+            id=user_id,
+        )
+    except Exception as e:
+        logger.error(f"Error posting copy result: {e}")
+        logger.error(f"{set_copy_result_payload(suggest_copy_dict)}")
+        await post_to_works(
+            payload=set_text_payload(str(suggest_copy_dict["phrases"])),
+            id=user_id,
+        )
+        await handle_start_event(user_id=user_id)
+    await handle_start_event(user_id=user_id)

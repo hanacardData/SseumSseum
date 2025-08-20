@@ -8,7 +8,6 @@ from bot.handlers.steps.start import handle_start_event
 from bot.handlers.steps.target import handle_target_input_event
 from bot.handlers.steps.task_selection import handle_task_selection_event
 from bot.services.db.dml import get_session, insert_log
-from bot.services.openai_client import get_openai_response
 from bot.services.steps_enum import INITIAL_CONTACT, Step
 from bot.services.works.payload import set_text_payload
 from bot.services.works.post_content import post_to_works
@@ -58,12 +57,10 @@ async def process_event(data: dict) -> JSONResponse:
         await event_handler(user_id=user_id, session=session, text=text)
         return JSONResponse(status_code=200, content={"status": BotStatus.OK})
     else:
-        response = await get_openai_response(
-            prompt="어떤 말을 들어도 지금은 봇 개발중이니까 대답할 수 없고 창의적인 농담을 답변으로 하도록 해.",
-            input=text,
-        )
         await post_to_works(
-            payload=set_text_payload(response),
+            payload=set_text_payload(
+                "죄송해요, 지금은 봇 개발 중이라 에러가 발생했나봐요. 시작하기 라고 쳐주세요!"
+            ),
             id=user_id,
         )
         return JSONResponse(status_code=200, content={"status": BotStatus.OK})
