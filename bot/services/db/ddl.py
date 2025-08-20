@@ -25,8 +25,7 @@ def init_db():
         CREATE TABLE IF NOT EXISTS log (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id TEXT,
-            context TEXT,
-            copy TEXT,
+            data TEXT,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY(user_id) REFERENCES session(user_id)
         );

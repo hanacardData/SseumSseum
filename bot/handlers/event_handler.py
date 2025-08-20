@@ -7,7 +7,7 @@ from bot.handlers.steps.purpose import handle_purpose_selection_event
 from bot.handlers.steps.start import handle_start_event
 from bot.handlers.steps.target import handle_target_input_event
 from bot.handlers.steps.task_selection import handle_task_selection_event
-from bot.services.db.dml import get_session
+from bot.services.db.dml import get_session, insert_log
 from bot.services.openai_client import get_openai_response
 from bot.services.steps_enum import INITIAL_CONTACT, Step
 from bot.services.works.payload import set_text_payload
@@ -18,12 +18,23 @@ async def process_event(data: dict) -> JSONResponse:
     event_type: str = data.get("type")
     source: dict = data.get("source", {})
     user_id: str = source.get("userId")
-
-    if event_type != "message":
+    if event_type not in ["message", "postback"]:
         return JSONResponse(status_code=200, content={"status": BotStatus.IGNORED})
+
+    if event_type == "postback":
+        insert_log(
+            user_id=user_id,
+            data=data["data"],
+        )
+        await post_to_works(
+            payload=set_text_payload("저장 완료!"),
+            id=user_id,
+        )
+        return JSONResponse(status_code=200, content={"status": BotStatus.OK})
 
     content = data.get("content", {})
     text: str = content.get("text", "")
+
     session = get_session(user_id)
     step = session.get("step", None)
     if text == INITIAL_CONTACT or not session or not step:

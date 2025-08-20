@@ -43,7 +43,7 @@ tone과 strategy는 반드시 아래 목록 중 하나만 출력해야 합니다
 """
 
 
-class SuggestionResult(BaseModel):
+class SuggestedToneStrategy(BaseModel):
     tone: str
     strategy: str
     tone_reasoning: str = Field(default="")
@@ -70,7 +70,7 @@ class SuggestionResult(BaseModel):
         return v
 
 
-async def suggest_tone_strategy(task_info: dict) -> SuggestionResult:
+async def suggest_tone_strategy(task_info: dict) -> SuggestedToneStrategy:
     """OpenAI 모델을 사용해 입력 텍스트에 어울리는 톤과 전략을 반환합니다."""
     tone_candidates = list(COPY_TONE_MAPPER.keys())
     strategy_candidates = list(COPY_STRATEGY_MAPPER.keys())
@@ -85,11 +85,10 @@ async def suggest_tone_strategy(task_info: dict) -> SuggestionResult:
         if not parsed:
             logger.error("Failed to parse OpenAI response.")
             raise Exception("Parsing error in OpenAI response.")
-        suggestion = SuggestionResult(**parsed)
-        return suggestion
+        return SuggestedToneStrategy(**parsed)
     except Exception as e:
         logger.error(f"Error in suggest tone and strategy: {e}")
-        return SuggestionResult(
+        return SuggestedToneStrategy(
             tone=random.choice(tone_candidates),
             strategy=random.choice(strategy_candidates),
         )
@@ -118,7 +117,10 @@ async def suggest_copy(task_info: dict, tone: str, strategy: str) -> dict | None
         if not result:
             logger.error("Failed to parse OpenAI response.")
             raise Exception("Parsing error in OpenAI response.")
-        return result
+        return {
+            "context": task_info,
+            "phrases": result,
+        }
 
     except Exception as e:
         logger.error(f"Error in suggest_copy: {e}")

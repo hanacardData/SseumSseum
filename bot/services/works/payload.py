@@ -116,9 +116,10 @@ def set_campagin_purpose_button_payload(content_text: str = PURPOSE) -> dict[str
     }
 
 
-def set_copy_result_payload(phrases: dict):
+def set_copy_result_payload(copy_result: dict):
     carousel_payload = {"type": "carousel", "contents": []}
-
+    phrases = copy_result.get("phrases")
+    context = copy_result.get("context")
     for _, phrase in phrases.items():
         bubble = {
             "type": "bubble",
@@ -159,7 +160,7 @@ def set_copy_result_payload(phrases: dict):
                         "text": "저장하기",
                         "action": {
                             "type": "postback",
-                            "data": json.dumps(phrase, ensure_ascii=False),
+                            "data": json.dumps(context | phrase, ensure_ascii=False),
                         },
                         "size": "sm",
                         "align": "center",
