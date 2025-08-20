@@ -17,18 +17,21 @@ async def handle_description_input_event(
     context = session["context"]
     context[Step.DESCRIPTION.value] = text
     upsert_session(user_id=user_id, step=Step.DESCRIPTION.value, context=context)
-    await post_to_works(payload=set_text_payload(str(context)), id=user_id)
+    await post_to_works(
+        payload=set_text_payload("멋진 카피 작성을 고민하고 있어요!"), id=user_id
+    )
+    # await post_to_works(payload=set_text_payload(str(context)), id=user_id) # 디버깅용
     tone_strategy = await suggest_tone_strategy(context)
     await post_to_works(
-        payload=set_text_payload(tone_strategy["tone_thoughts"]), id=user_id
+        payload=set_text_payload(f"({tone_strategy.tone_thoughts})"), id=user_id
     )
     await post_to_works(
-        payload=set_text_payload(tone_strategy["strategy_thoughts"]), id=user_id
+        payload=set_text_payload(f"({tone_strategy.strategy_thoughts})"), id=user_id
     )
     result = await suggest_copy(
         task_info=context,
-        tone=tone_strategy["tone"],
-        strategy=tone_strategy["strategy"],
+        tone=tone_strategy.tone,
+        strategy=tone_strategy.strategy,
     )
     await post_to_works(
         payload=set_text_payload(result),
