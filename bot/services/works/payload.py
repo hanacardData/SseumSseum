@@ -160,7 +160,11 @@ def set_copy_result_payload(copy_result: dict):
                         "text": "저장하기",
                         "action": {
                             "type": "postback",
-                            "data": json.dumps(context | phrase, ensure_ascii=False),
+                            "data": json.dumps(
+                                {k: context[k] for k in ["channel", "purpose"]}
+                                | phrase,
+                                ensure_ascii=False,
+                            ),
                         },
                         "size": "sm",
                         "align": "center",

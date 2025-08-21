@@ -58,4 +58,5 @@ async def handle_description_input_event(
             id=user_id,
         )
         await handle_start_event(user_id=user_id)
+        return
     await handle_start_event(user_id=user_id)
