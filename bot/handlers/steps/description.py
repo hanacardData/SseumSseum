@@ -13,5 +13,5 @@ async def handle_description_input_event(
     """
     context = session["context"]
     context[Step.DESCRIPTION.value] = text
-    generate_copy(user_id=user_id, context=context)
+    await generate_copy(user_id=user_id, context=context)
     await handle_start_event(user_id=user_id)

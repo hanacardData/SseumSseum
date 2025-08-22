@@ -7,8 +7,13 @@ from bot.services.works.payload import (
 )
 from bot.services.works.post_content import post_to_works
 
-_GENERATE = "좋아요! 씀씀이와 함께 카피를 만들어볼까요? 4단계만 거치면 바로 완성돼요!"
+_GENERATE = """좋아요! 씀씀이와 함께 카피를 만들어볼까요?
+4단계만 거치면 바로 완성돼요!
+"""
 _CHANNEL = "첫번째로, 카피를 담을 채널을 선택해주세요!"
+_WRONG_TASK_SELECTION = (
+    "'{text}' 입력은 이해할 수 없어요. 수행하시려는 작업을 다시 선택해주세요."
+)
 
 
 async def handle_task_selection_event(user_id: str, session: dict, text: str) -> None:
@@ -36,7 +41,7 @@ async def handle_task_selection_event(user_id: str, session: dict, text: str) ->
         await handle_start_event(user_id)
     else:
         await post_to_works(
-            payload=set_text_payload("잘못된 입력입니다. 다시 시도해주세요."),
+            payload=set_text_payload(_WRONG_TASK_SELECTION.format(text=text)),
             id=user_id,
         )
         await handle_start_event(user_id)

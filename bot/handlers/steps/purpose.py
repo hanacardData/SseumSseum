@@ -16,9 +16,7 @@ _TARGET = """{purpose} 목적으로 캠페인을 진행하시는군요!
 - 다음달 미국 여행을 준비중인 유학생
 - 신용카드 없이 체크카드만 쓰는 20대 후반 직장인
 """
-_WRONG_PURPOSE = (
-    "{text} 입력은 이해할 수 없는 입력이에요. 캠페인 목적을 다시 입력해주세요."
-)
+_WRONG_PURPOSE = "'{text}' 입력은 이해할 수 없어요. 캠페인 목적을 다시 입력해주세요."
 
 
 async def handle_purpose_selection_event(
@@ -48,6 +46,8 @@ async def handle_purpose_selection_event(
         return
 
     await post_to_works(
-        payload=set_campagin_purpose_button_payload(_WRONG_PURPOSE.format(text=text)),
+        payload=set_campagin_purpose_button_payload(
+            content_text=_WRONG_PURPOSE.format(text=text)
+        ),
         id=user_id,
     )
