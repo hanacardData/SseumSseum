@@ -10,6 +10,7 @@ class Step(str, Enum):
     PURPOSE = "purpose"
     TARGET = "target"
     DESCRIPTION = "description"
+    SUMMARY = "summary"
 
 
 class TaskSelection(str, Enum):

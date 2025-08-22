@@ -1,6 +1,6 @@
 import json
 
-from bot.services.steps_enum import Channel, Purpose, TaskSelection
+from bot.services.steps_enum import Channel, Purpose, Step, TaskSelection
 
 
 def set_text_payload(message: str) -> dict[str, dict[str, str]]:
@@ -117,8 +117,8 @@ def set_campagin_purpose_button_payload(content_text: str) -> dict[str, dict]:
 
 def set_copy_result_payload(copy_result: dict):
     carousel_payload = {"type": "carousel", "contents": []}
-    phrases = copy_result.get("phrases")
-    context = copy_result.get("context")
+    phrases: dict = copy_result.get("phrases")
+    context: dict = copy_result.get("context")
     for _, phrase in phrases.items():
         bubble = {
             "type": "bubble",
@@ -160,7 +160,14 @@ def set_copy_result_payload(copy_result: dict):
                         "action": {
                             "type": "postback",
                             "data": json.dumps(
-                                {k: context[k] for k in ["channel", "purpose"]}
+                                {
+                                    k: context.get(k)
+                                    for k in [
+                                        Step.CHANNEL.value,
+                                        Step.PURPOSE.value,
+                                        Step.SUMMARY.value,
+                                    ]
+                                }
                                 | phrase,
                                 ensure_ascii=False,
                             ),

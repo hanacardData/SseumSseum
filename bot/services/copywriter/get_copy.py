@@ -80,7 +80,10 @@ async def suggest_tone_strategy(task_info: dict) -> SuggestedToneStrategy:
         task_info=str(task_info),
     )
     try:
-        result = await get_openai_response(prompt=prompt, input=prompt)
+        result = await get_openai_response(
+            prompt="You are a helpful marketer.",
+            input=prompt,
+        )
         parsed = parse_json(result)
         if not parsed:
             logger.error("Failed to parse OpenAI response.")
