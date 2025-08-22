@@ -53,17 +53,17 @@ MESSAGE_PROPMT: str = """
 반드시 설명을 제외한 JSON만 출력하십시오.
 
 {{
-  "phrase 1":
+  "phrase1":
     {{
         "title": "{{생성된 제목 1}}",
         "content": "{{생성된 본문 1}}"
     }},
-  "phrase 2":
+  "phrase2":
     {{
         "title": "{{생성된 제목 2}}",
         "content": "{{생성된 본문 2}}"
     }},
-  "phrase 3":
+  "phrase3":
     {{
         "title": "{{생성된 제목 3}}",
         "content": "{{생성된 본문 3}}"

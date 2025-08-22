@@ -1,6 +1,8 @@
 from enum import Enum
 
 INITIAL_CONTACT: str = "시작하기"
+SUMMARY: str = "summary"
+COPIES: str = "copies"
 
 
 class Step(str, Enum):
@@ -10,7 +12,7 @@ class Step(str, Enum):
     PURPOSE = "purpose"
     TARGET = "target"
     DESCRIPTION = "description"
-    SUMMARY = "summary"
+    END = "end"
 
 
 class TaskSelection(str, Enum):

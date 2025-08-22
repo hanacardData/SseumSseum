@@ -1,6 +1,4 @@
-import json
-
-from bot.services.steps_enum import Channel, Purpose, Step, TaskSelection
+from bot.services.steps_enum import Channel, Purpose, TaskSelection
 
 
 def set_text_payload(message: str) -> dict[str, dict[str, str]]:
@@ -118,8 +116,7 @@ def set_campagin_purpose_button_payload(content_text: str) -> dict[str, dict]:
 def set_copy_result_payload(copy_result: dict):
     carousel_payload = {"type": "carousel", "contents": []}
     phrases: dict = copy_result.get("phrases")
-    context: dict = copy_result.get("context")
-    for _, phrase in phrases.items():
+    for key, phrase in phrases.items():
         bubble = {
             "type": "bubble",
             "size": "kilo",
@@ -156,21 +153,10 @@ def set_copy_result_payload(copy_result: dict):
                 "contents": [
                     {
                         "type": "text",
-                        "text": "저장하기",
+                        "text": "기억해두기",
                         "action": {
                             "type": "postback",
-                            "data": json.dumps(
-                                {
-                                    k: context.get(k)
-                                    for k in [
-                                        Step.CHANNEL.value,
-                                        Step.PURPOSE.value,
-                                        Step.SUMMARY.value,
-                                    ]
-                                }
-                                | phrase,
-                                ensure_ascii=False,
-                            ),
+                            "data": key,
                         },
                         "size": "sm",
                         "align": "center",
@@ -187,5 +173,20 @@ def set_copy_result_payload(copy_result: dict):
             "type": "flex",
             "altText": "카피 생성 결과",
             "contents": carousel_payload,
+        }
+    }
+
+
+def set_restart_button_payload() -> dict[str, dict]:
+    return {
+        "content": {
+            "type": "button_template",
+            "contentText": "새로운 작업을 시작하시겠어요? 저장하지 않은 모든 내용은 사라져요.",
+            "actions": [
+                {
+                    "type": "message",
+                    "label": "시작하기",
+                },
+            ],
         }
     }

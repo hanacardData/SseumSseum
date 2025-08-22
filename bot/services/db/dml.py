@@ -22,18 +22,24 @@ def upsert_session(user_id: str, step: str, context: dict):
         conn.commit()
 
 
-def insert_log(user_id: str, data: dict | str):
-    if isinstance(data, dict):
-        data = json.dumps(data, ensure_ascii=False)
-
+def insert_log(
+    user_id: str,
+    channel: str,
+    purpose: str,
+    target: str,
+    description: str,
+    summary: str,
+    title: str,
+    content: str,
+):
     with sqlite3.connect(DB_PATH) as conn:
         cur = conn.cursor()
         cur.execute(
             """
-            INSERT INTO log (user_id, data)
-            VALUES (?, ?)
+            INSERT INTO log (user_id, channel, purpose, target, description, summary, title, content)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """,
-            (user_id, data),
+            (user_id, channel, purpose, target, description, summary, title, content),
         )
         cur.execute(
             """
@@ -53,7 +59,7 @@ def insert_log(user_id: str, data: dict | str):
 
 
 def get_session(user_id: str) -> dict[str, str]:
-    """특정 user_id 의 세션 정보 조회"""
+    """특정 user_id 의 세션 정보 조회, step, context, updated_at 빈환"""
     with sqlite3.connect(DB_PATH) as conn:
         conn.row_factory = sqlite3.Row  # 결과를 dict 처럼 사용 가능
         cur = conn.cursor()

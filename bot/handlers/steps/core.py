@@ -3,7 +3,8 @@ import random
 from bot.logger import logger
 from bot.services.copywriter.get_copy import suggest_copy, suggest_tone_strategy
 from bot.services.copywriter.get_summary import summarise_context
-from bot.services.steps_enum import Step
+from bot.services.db.dml import upsert_session
+from bot.services.steps_enum import COPIES, SUMMARY, Step
 from bot.services.works.payload import set_copy_result_payload, set_text_payload
 from bot.services.works.post_content import post_to_works
 
@@ -37,12 +38,13 @@ async def generate_copy(user_id: str, context: dict) -> None:
             payload=set_text_payload(f"'{summary}'를 위해 작성을 준비하시는군요!"),
             id=user_id,
         )
-        context[Step.SUMMARY.value] = summary
     else:
         await post_to_works(
             payload=set_text_payload("어려운 주제로 문구를 작성하시네요..!"),
             id=user_id,
         )
+        summary = ""
+    context[SUMMARY] = summary
 
     ## 톤과 전략 생성
     tone_strategy = await suggest_tone_strategy(context)
@@ -82,4 +84,6 @@ async def generate_copy(user_id: str, context: dict) -> None:
             payload=set_text_payload(str(suggest_copy_dict["phrases"])),
             id=user_id,
         )
+    context[COPIES] = suggest_copy_dict["phrases"]
+    upsert_session(user_id=user_id, step=Step.END.value, context=context)
     return

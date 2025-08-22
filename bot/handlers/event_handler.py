@@ -8,7 +8,7 @@ from bot.handlers.steps.start import handle_start_event
 from bot.handlers.steps.target import handle_target_input_event
 from bot.handlers.steps.task_selection import handle_task_selection_event
 from bot.services.db.dml import get_session, insert_log
-from bot.services.steps_enum import INITIAL_CONTACT, Step
+from bot.services.steps_enum import COPIES, INITIAL_CONTACT, SUMMARY, Step
 from bot.services.works.payload import set_text_payload
 from bot.services.works.post_content import post_to_works
 
@@ -21,15 +21,27 @@ async def process_event(data: dict) -> JSONResponse:
         return JSONResponse(status_code=200, content={"status": BotStatus.IGNORED})
 
     if event_type == "postback":
-        insert_log(
-            user_id=user_id,
-            data=data["data"],
-        )
-        await post_to_works(
-            payload=set_text_payload("저장 완료!"),
-            id=user_id,
-        )
-        return JSONResponse(status_code=200, content={"status": BotStatus.OK})
+        session = get_session(user_id)
+        if session and session.get("step") == Step.END.value and "context" in session:
+            # data["data"]: copy idx -> phrase 1 phrase 2 ...
+            save_copy: dict = session["context"][COPIES][data["data"]]
+            insert_log(
+                user_id=user_id,
+                channel=session["context"][Step.CHANNEL.value],
+                purpose=session["context"][Step.PURPOSE.value],
+                target=session["context"][Step.TARGET.value],
+                description=session["context"][Step.DESCRIPTION.value],
+                summary=session["context"][SUMMARY],
+                title=save_copy["title"],
+                content=save_copy["content"],
+            )
+            print(session)
+            print(save_copy)
+            await post_to_works(
+                payload=set_text_payload("기억해둘게요!"),
+                id=user_id,
+            )
+            return JSONResponse(status_code=200, content={"status": BotStatus.OK})
 
     content = data.get("content", {})
     text: str = content.get("text", "")

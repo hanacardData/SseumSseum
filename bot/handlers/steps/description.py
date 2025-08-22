@@ -1,6 +1,7 @@
 from bot.handlers.steps.core import generate_copy
-from bot.handlers.steps.start import handle_start_event
 from bot.services.steps_enum import Step
+from bot.services.works.payload import set_restart_button_payload
+from bot.services.works.post_content import post_to_works
 
 
 async def handle_description_input_event(
@@ -14,4 +15,4 @@ async def handle_description_input_event(
     context = session["context"]
     context[Step.DESCRIPTION.value] = text
     await generate_copy(user_id=user_id, context=context)
-    await handle_start_event(user_id=user_id)
+    await post_to_works(payload=set_restart_button_payload(), id=user_id)

@@ -1,6 +1,8 @@
 import sqlite3
 
-from bot.services.db.variables import DB_PATH
+# from bot.services.db.variables import DB_PATH
+
+DB_PATH = "conversation.db"
 
 
 def init_db():
@@ -25,7 +27,13 @@ def init_db():
         CREATE TABLE IF NOT EXISTS log (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id TEXT,
-            data TEXT,
+            channel TEXT,
+            purpose TEXT,
+            target TEXT,
+            description TEXT,
+            summary TEXT,
+            title TEXT,
+            content TEXT,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY(user_id) REFERENCES session(user_id)
         );
