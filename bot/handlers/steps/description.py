@@ -18,10 +18,11 @@ async def handle_description_input_event(
     context = session["context"]
     context[Step.DESCRIPTION.value] = text
     upsert_session(user_id=user_id, step=Step.DESCRIPTION.value, context=context)
+
+    ## 카피 생성 시작
     await post_to_works(
         payload=set_text_payload("멋진 카피 작성을 고민하고 있어요!"), id=user_id
     )
-    # await post_to_works(payload=set_text_payload(str(context)), id=user_id) # 디버깅용
     tone_strategy = await suggest_tone_strategy(context)
     await post_to_works(
         payload=set_text_payload(tone_strategy.tone_thoughts), id=user_id
@@ -38,7 +39,7 @@ async def handle_description_input_event(
         await post_to_works(
             payload=set_text_payload(
                 "카피 생성에 실패했어요. 다시 시도해주세요."
-                + "만약 오류가 반복된다면 데이터 사업부에 문의해주세요."
+                + "오류가 반복된다면 데이터 사업부에 문의해주세요."
             ),
             id=user_id,
         )

@@ -7,6 +7,9 @@ from bot.services.works.payload import (
 )
 from bot.services.works.post_content import post_to_works
 
+_PURPOSE = "{channel} 채널을 선택하셨군요! 다음으로는 캠페인의 목적을 선택해주세요."
+_WRONG_CHANNEL = "{text} 입력은 이해할 수 없는 입력이에요. 채널을 다시 입력해주세요."
+
 
 async def handle_channel_selection_event(
     user_id: str, session: dict, text: str
@@ -23,11 +26,17 @@ async def handle_channel_selection_event(
         context = session["context"]
         context[Step.CHANNEL.value] = text
         upsert_session(user_id=user_id, step=Step.CHANNEL.value, context=context)
-        await post_to_works(payload=set_campagin_purpose_button_payload(), id=user_id)
+        await post_to_works(
+            payload=set_campagin_purpose_button_payload(
+                context_text=_PURPOSE.format(channel=text)
+            ),
+            id=user_id,
+        )
+        return
     else:
         await post_to_works(
             payload=set_channel_button_payload(
-                "잘못된 입력입니다. 채널을 다시 입력해주세요."
+                content_text=_WRONG_CHANNEL.format(text=text)
             ),
             id=user_id,
         )

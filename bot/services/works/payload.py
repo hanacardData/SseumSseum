@@ -1,7 +1,6 @@
 import json
 
 from bot.services.steps_enum import Channel, Purpose, TaskSelection
-from bot.services.works.written_message import CHANNEL, PURPOSE
 
 
 def set_text_payload(message: str) -> dict[str, dict[str, str]]:
@@ -34,7 +33,7 @@ def set_task_selection_image_carousel_payload() -> dict[str, dict]:
     }
 
 
-def set_channel_button_payload(content_text: str = CHANNEL) -> dict[str, dict]:
+def set_channel_button_payload(content_text: str) -> dict[str, dict]:
     return {
         "content": {
             "type": "button_template",
@@ -65,7 +64,7 @@ def set_channel_button_payload(content_text: str = CHANNEL) -> dict[str, dict]:
     }
 
 
-def set_campagin_purpose_button_payload(content_text: str = PURPOSE) -> dict[str, dict]:
+def set_campagin_purpose_button_payload(content_text: str) -> dict[str, dict]:
     return {
         "content": {
             "type": "button_template",

@@ -6,7 +6,19 @@ from bot.services.works.payload import (
     set_text_payload,
 )
 from bot.services.works.post_content import post_to_works
-from bot.services.works.written_message import TARGET
+
+_BACK = "채널선택으로 다시 돌아왔어요!"
+_TARGET = """{purpose} 목적으로 캠페인을 진행하시는군요!
+세번째로, 메세지를 받을 손님에 대해 설명해주세요.
+
+예시)
+- 하나대학교 신입생
+- 다음달 미국 여행을 준비중인 유학생
+- 신용카드 없이 체크카드만 쓰는 20대 후반 직장인
+"""
+_WRONG_PURPOSE = (
+    "{text} 입력은 이해할 수 없는 입력이에요. 캠페인 목적을 다시 입력해주세요."
+)
 
 
 async def handle_purpose_selection_event(
@@ -19,7 +31,9 @@ async def handle_purpose_selection_event(
     if text == Purpose.PREV.value:
         context = session["context"]
         context.pop(Step.CHANNEL.value, None)
-        await post_to_works(payload=set_channel_button_payload(), id=user_id)
+        await post_to_works(
+            payload=set_channel_button_payload(content_text=_BACK), id=user_id
+        )
         upsert_session(user_id=user_id, step=Step.TASK_SELECTION.value, context=context)
         return
 
@@ -27,11 +41,13 @@ async def handle_purpose_selection_event(
         context = session["context"]
         context[Step.PURPOSE.value] = text
         upsert_session(user_id=user_id, step=Step.PURPOSE.value, context=context)
-        await post_to_works(payload=set_text_payload(TARGET), id=user_id)
-    else:
         await post_to_works(
-            payload=set_campagin_purpose_button_payload(
-                "잘못된 입력입니다. 다시 시도해주세요."
-            ),
+            payload=set_text_payload(_TARGET.format(purpose=text)),
             id=user_id,
         )
+        return
+
+    await post_to_works(
+        payload=set_campagin_purpose_button_payload(_WRONG_PURPOSE.format(text=text)),
+        id=user_id,
+    )
