@@ -162,7 +162,19 @@ def set_copy_result_payload(copy_result: dict):
                         "align": "center",
                         "style": "normal",
                         "color": "#157efb",
-                    }
+                    },
+                    {
+                        "type": "text",
+                        "text": "복사하기",
+                        "action": {
+                            "type": "copy",
+                            "copyText": phrase["title"] + " " + phrase["content"],
+                        },
+                        "size": "sm",
+                        "align": "center",
+                        "style": "normal",
+                        "color": "#157efb",
+                    },
                 ],
             },
         }
@@ -181,11 +193,12 @@ def set_restart_button_payload() -> dict[str, dict]:
     return {
         "content": {
             "type": "button_template",
-            "contentText": "새로운 작업을 시작하시겠어요? 저장하지 않은 모든 내용은 사라져요.",
+            "contentText": "새로운 작업을 시작하시겠어요? 시작하시려면 아래버튼을 눌러주세요! 저장하지 않은 모든 내용은 사라져요.",
             "actions": [
                 {
                     "type": "message",
-                    "label": "시작하기",
+                    "text": "시작하기",
+                    "label": "다시 시작하기",
                 },
             ],
         }
