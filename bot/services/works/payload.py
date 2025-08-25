@@ -26,6 +26,14 @@ def set_task_selection_image_carousel_payload() -> dict[str, dict]:
                         "text": TaskSelection.COPY_FIX.value,
                     },
                 },
+                {
+                    "originalContentUrl": "https://static.worksmobile.net/static/wm/botprofile/Bot_General_640.png",
+                    "action": {
+                        "type": "message",
+                        "label": TaskSelection.COPY_VIEW.value,
+                        "text": TaskSelection.COPY_VIEW.value,
+                    },
+                },
             ],
         }
     }

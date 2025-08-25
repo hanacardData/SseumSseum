@@ -1,4 +1,4 @@
-from bot.handlers.steps.start import handle_start_event
+from bot.handlers.start import handle_start_event
 from bot.services.db.dml import upsert_session
 from bot.services.steps_enum import Step, TaskSelection
 from bot.services.works.payload import (

@@ -11,7 +11,7 @@ _GREETINGS = "어떤 문구가 고민이신가요? 씀씀이와 함께 써봐요
 
 async def handle_start_event(user_id: str) -> None:
     """start step,
-    카피 생성하기, 카피 다듬기 선택지를 송신
+    카피 생성하기, 카피 다듬기 선택지, 저장한 카피 보기를 송신
     Session에 step을 START로 설정, context는 빈 딕셔너리로 초기화
     """
     await post_to_works(

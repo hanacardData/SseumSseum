@@ -86,28 +86,30 @@ def get_session(user_id: str) -> dict[str, str]:
         }
 
 
-def get_logs(user_id: str, limit: int = 10) -> list[dict[str, str]]:
+def get_logs(user_id: str, limit: int = 10) -> dict[str, dict[str, dict[str, str]]]:
     """특정 user_id 의 로그 최신순 조회"""
     with sqlite3.connect(DB_PATH) as conn:
         conn.row_factory = sqlite3.Row
         cur = conn.cursor()
         cur.execute(
             """
-            SELECT user_id, data FROM log
+            SELECT title, content FROM log
             WHERE user_id = ?
-            ORDER BY created_at DESC
+            ORDER BY id DESC
             LIMIT ?
             """,
             (user_id, limit),
         )
         rows = cur.fetchall()
 
-        results = []
-        for row in rows:
-            results.append(
+        results = {"phrases": {}}
+        for idx, row in enumerate(rows):
+            results["phrases"].update(
                 {
-                    "user_id": row["user_id"],
-                    "data": json.loads(row["data"]) if row["data"] else {},
+                    f"phrase{idx}": {
+                        "title": row["title"],
+                        "content": row["content"],
+                    }
                 }
             )
         return results

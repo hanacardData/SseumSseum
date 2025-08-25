@@ -3,6 +3,7 @@ from enum import Enum
 INITIAL_CONTACT: str = "시작하기"
 SUMMARY: str = "summary"
 COPIES: str = "copies"
+VIEW: str = "기억한 카피 보기"
 
 
 class Step(str, Enum):
@@ -18,6 +19,7 @@ class Step(str, Enum):
 class TaskSelection(str, Enum):
     COPY_GENERATE = "카피 생성하기"
     COPY_FIX = "카피 다듬기"
+    COPY_VIEW = "기억한 카피 보기"
 
 
 class Channel(str, Enum):

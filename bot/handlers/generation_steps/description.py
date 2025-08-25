@@ -1,4 +1,4 @@
-from bot.handlers.steps.core import generate_copy
+from bot.handlers.generation_steps.core import generate_copy
 from bot.services.steps_enum import Step
 from bot.services.works.payload import set_restart_button_payload
 from bot.services.works.post_content import post_to_works
