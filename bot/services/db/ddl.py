@@ -31,7 +31,6 @@ def init_db():
             purpose TEXT,
             target TEXT,
             description TEXT,
-            summary TEXT,
             title TEXT,
             content TEXT,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

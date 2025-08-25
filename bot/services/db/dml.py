@@ -28,7 +28,6 @@ def insert_log(
     purpose: str,
     target: str,
     description: str,
-    summary: str,
     title: str,
     content: str,
 ):
@@ -36,10 +35,10 @@ def insert_log(
         cur = conn.cursor()
         cur.execute(
             """
-            INSERT INTO log (user_id, channel, purpose, target, description, summary, title, content)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO log (user_id, channel, purpose, target, description, title, content)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
             """,
-            (user_id, channel, purpose, target, description, summary, title, content),
+            (user_id, channel, purpose, target, description, title, content),
         )
         cur.execute(
             """

@@ -70,11 +70,8 @@ async def suggest_tone_strategy(task_info: dict) -> SuggestedToneStrategy:
 
 
 @retry(tries=3, delay=1, backoff=2, exceptions=Exception)
-async def suggest_copy(task_info: dict, tone: str, strategy: str) -> dict | None:
-    """입력 텍스트에 어울리는 카피를 생성합니다.
-    "context", "phrases" 키를 포함하는 딕셔너리를 반환합니다.
-    "phrases"는 "phrase 1", "phrase 2", ... 형식의 키를 가지며, 각 키는 "title"과 "content"를 포함하는 딕셔너리입니다.
-    """
+async def suggest_copy(task_info: dict, tone: str, strategy: str) -> str | None:
+    """입력 텍스트에 어울리는 카피를 생성합니다."""
     copy_tone_prompt = COPY_TONE_MAPPER[tone]
     copy_strategy_prompt = COPY_STRATEGY_MAPPER[strategy]
 
@@ -87,23 +84,10 @@ async def suggest_copy(task_info: dict, tone: str, strategy: str) -> dict | None
     )
 
     try:
-        result = await get_openai_response(
+        return await get_openai_response(
             prompt="You are a helpful marketer.",
             input=prompt,
         )
-        result = parse_json(result)
-        if not result:
-            logger.error("Failed to parse OpenAI response.")
-            raise Exception("Parsing error in OpenAI response.")
-        for key, phrase in result.items():
-            result[key]["title"] = phrase["title"].strip('"{}').strip()
-            result[key]["content"] = phrase["content"].strip('"{}').strip()
-
-        return {
-            "context": task_info,
-            "phrases": result,
-        }
-
     except Exception as e:
         logger.error(f"Error in suggest_copy: {e}")
         return

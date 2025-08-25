@@ -137,9 +137,8 @@ def set_restart_button_payload() -> dict[str, dict]:
     }
 
 
-def set_copy_result_payload(copy_result: dict):
+def set_copy_result_payload(phrases: dict):
     carousel_payload = {"type": "carousel", "contents": []}
-    phrases: dict = copy_result.get("phrases")
     for key, phrase in phrases.items():
         bubble = {
             "type": "bubble",
