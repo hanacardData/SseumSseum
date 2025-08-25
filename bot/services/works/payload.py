@@ -121,6 +121,22 @@ def set_campagin_purpose_button_payload(content_text: str) -> dict[str, dict]:
     }
 
 
+def set_restart_button_payload() -> dict[str, dict]:
+    return {
+        "content": {
+            "type": "button_template",
+            "contentText": "새로운 작업을 시작하시겠어요? 시작하시려면 아래버튼을 눌러주세요! 저장하지 않은 모든 내용은 사라져요.",
+            "actions": [
+                {
+                    "type": "message",
+                    "text": "시작하기",
+                    "label": "다시 시작하기",
+                },
+            ],
+        }
+    }
+
+
 def set_copy_result_payload(copy_result: dict):
     carousel_payload = {"type": "carousel", "contents": []}
     phrases: dict = copy_result.get("phrases")
@@ -197,17 +213,64 @@ def set_copy_result_payload(copy_result: dict):
     }
 
 
-def set_restart_button_payload() -> dict[str, dict]:
+def set_view_result_payload(phrases: list[dict[str, str]]):
+    carousel_payload = {"type": "carousel", "contents": []}
+    for phrase in phrases:
+        bubble = {
+            "type": "bubble",
+            "size": "kilo",
+            "header": {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                    {
+                        "type": "text",
+                        "text": phrase["title"],
+                        "wrap": True,
+                        "weight": "bold",
+                        "size": "sm",
+                        "color": "#000000",
+                    }
+                ],
+            },
+            "body": {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                    {
+                        "type": "text",
+                        "text": phrase["content"],
+                        "wrap": True,
+                        "size": "sm",
+                        "color": "#000000",
+                    }
+                ],
+            },
+            "footer": {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                    {
+                        "type": "text",
+                        "text": "복사하기",
+                        "action": {
+                            "type": "copy",
+                            "copyText": phrase["title"] + " " + phrase["content"],
+                        },
+                        "size": "sm",
+                        "align": "center",
+                        "style": "normal",
+                        "color": "#157efb",
+                    },
+                ],
+            },
+        }
+        carousel_payload["contents"].append(bubble)
+
     return {
         "content": {
-            "type": "button_template",
-            "contentText": "새로운 작업을 시작하시겠어요? 시작하시려면 아래버튼을 눌러주세요! 저장하지 않은 모든 내용은 사라져요.",
-            "actions": [
-                {
-                    "type": "message",
-                    "text": "시작하기",
-                    "label": "다시 시작하기",
-                },
-            ],
+            "type": "flex",
+            "altText": "카피 불러오기 결과",
+            "contents": carousel_payload,
         }
     }

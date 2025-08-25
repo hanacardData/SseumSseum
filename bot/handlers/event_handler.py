@@ -63,7 +63,6 @@ async def process_event(data: dict) -> JSONResponse:
         Step.CHANNEL.value: handle_purpose_selection_event,
         Step.PURPOSE.value: handle_target_input_event,
         Step.TARGET.value: handle_description_input_event,
-        Step.VIEW.value: handle_view_event,
     }
     event_handler = event_handler_map.get(step)
 

@@ -9,7 +9,7 @@ from bot.services.works.post_content import post_to_works
 
 _BACK = "채널선택으로 다시 돌아왔어요!"
 _TARGET = """{purpose} 목적으로 캠페인을 진행하시는군요!
-세번째로, 메세지를 받을 손님에 대해 설명해주세요.
+세번째로, 메시지를 받을 손님에 대해 설명해주세요.
 
 예시)
 - 하나대학교 신입생

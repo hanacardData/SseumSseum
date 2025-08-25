@@ -23,7 +23,7 @@ class TaskSelection(str, Enum):
 
 
 class Channel(str, Enum):
-    PUSH = "PUSH 메세지"
+    PUSH = "PUSH 메시지"
     LMS = "LMS"
     SMS = "SMS"
     TALK = "알림톡"

@@ -1,8 +1,8 @@
 from bot.services.db.dml import get_logs
 from bot.services.works.payload import (
-    set_copy_result_payload,
     set_restart_button_payload,
     set_text_payload,
+    set_view_result_payload,
 )
 from bot.services.works.post_content import post_to_works
 
@@ -18,5 +18,5 @@ async def handle_view_event(user_id: str) -> None:
             payload=set_text_payload("저장하신 카피가 없어요!"), id=user_id
         )
     else:
-        await post_to_works(payload=set_copy_result_payload(_copies), id=user_id)
+        await post_to_works(payload=set_view_result_payload(_copies), id=user_id)
     await post_to_works(payload=set_restart_button_payload(), id=user_id)
