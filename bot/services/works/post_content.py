@@ -3,7 +3,11 @@ from retry import retry
 
 from bot.logger import logger
 from bot.services.works.access_token import set_headers
-from bot.services.works.variables import CHANNEL_POST_URL, USER_POST_URL
+
+CHANNEL_POST_URL = (
+    "https://www.worksapis.com/v1.0/bots/10608672/channels/{channel_id}/messages"
+)
+USER_POST_URL = "https://www.worksapis.com/v1.0/bots/10608672/users/{user_id}/messages"
 
 
 @retry(tries=3, delay=1, backoff=2, exceptions=(httpx.RequestError, httpx.HTTPError))

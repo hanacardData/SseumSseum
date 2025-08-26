@@ -28,7 +28,7 @@ async def callback(
     if not x_works_signature or not verify_signature(
         raw_text, x_works_signature, settings.bot_secret
     ):
-        logger.warning("Invalid or missing signature.")
+        logger.error("Invalid or missing signature.")
         raise HTTPException(status_code=403, detail="Invalid or missing signature")
 
     data = await request.json()
