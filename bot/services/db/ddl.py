@@ -1,8 +1,6 @@
 import sqlite3
 
-# from bot.services.db.variables import DB_PATH
-
-DB_PATH = "conversation.db"
+from bot.services.db.variables import DB_PATH
 
 
 def init_db():
