@@ -1,4 +1,4 @@
-TONE_STRATEGY_SELECTION_PROMPT = """
+TONE_STRATEGY_SELECTION_PROMPT: str = """
 아래와 같은 정보를 기반으로, 가장 적합한 톤과 전략을 선택하세요.
 
 정보:
