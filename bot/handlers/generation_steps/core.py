@@ -63,7 +63,6 @@ async def generate_copy(user_id: str, context: dict) -> None:
         ),
         id=user_id,
     )
-    ## 캠페인 요약 생성
     await post_to_works(
         payload=set_text_payload(
             f"{random.choice(_TEXTS_FOR_CHIILING)} 주제로 문구를 작성하시네요."
