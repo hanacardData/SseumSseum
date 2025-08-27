@@ -11,7 +11,7 @@ def set_task_selection_image_carousel_payload() -> dict[str, dict]:
             "type": "image_carousel",
             "columns": [
                 {
-                    "originalContentUrl": "https://static.worksmobile.net/static/wm/botprofile/Bot_General_640.png",
+                    "originalContentUrl": "https://i.imgur.com/09crFe5.png",
                     "action": {
                         "type": "message",
                         "label": TaskSelection.COPY_GENERATE.value,
@@ -19,7 +19,7 @@ def set_task_selection_image_carousel_payload() -> dict[str, dict]:
                     },
                 },
                 {
-                    "originalContentUrl": "https://static.worksmobile.net/static/wm/botprofile/Bot_General_640.png",
+                    "originalContentUrl": "https://i.imgur.com/QnJNPD9.png",
                     "action": {
                         "type": "message",
                         "label": TaskSelection.COPY_FIX.value,
@@ -27,11 +27,19 @@ def set_task_selection_image_carousel_payload() -> dict[str, dict]:
                     },
                 },
                 {
-                    "originalContentUrl": "https://static.worksmobile.net/static/wm/botprofile/Bot_General_640.png",
+                    "originalContentUrl": "https://i.imgur.com/3j29wQx.png",
                     "action": {
                         "type": "message",
                         "label": TaskSelection.COPY_VIEW.value,
                         "text": TaskSelection.COPY_VIEW.value,
+                    },
+                },
+                {
+                    "originalContentUrl": "https://i.imgur.com/Fb7wlVX.png",
+                    "action": {
+                        "type": "message",
+                        "label": TaskSelection.FAQ.value,
+                        "text": TaskSelection.FAQ.value,
                     },
                 },
             ],
