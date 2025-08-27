@@ -15,9 +15,9 @@ class Step(str, Enum):
 
 
 class TaskSelection(str, Enum):
-    COPY_GENERATE = "카피 생성하기"
+    COPY_GENERATE = "카피 만들기"
     COPY_FIX = "카피 다듬기"
-    COPY_VIEW = "기억한 카피 보기"
+    COPY_VIEW = "이전 카피 보기"
     FAQ = "FAQ"
 
 
