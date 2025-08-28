@@ -23,7 +23,6 @@ async def process_event(data: dict) -> JSONResponse:
     if event_type == "postback":  # 기억해두기를 눌렀을 때
         session = get_session(user_id)
         if session and session.get("step") == Step.END.value and "context" in session:
-            # data["data"]: copy idx -> phrase 1 phrase 2 ...
             save_copy: dict = session["context"][COPIES][data["data"]]
             insert_log(
                 user_id=user_id,
@@ -41,6 +40,11 @@ async def process_event(data: dict) -> JSONResponse:
                 id=user_id,
             )
             return JSONResponse(status_code=200, content={"status": BotStatus.OK})
+        await post_to_works(
+            payload=set_text_payload("현재는 저장할 수 없어요!"),
+            id=user_id,
+        )
+        return JSONResponse(status_code=200, content={"status": BotStatus.OK})
 
     content = data.get("content", {})
     text: str = content.get("text", "")
@@ -66,7 +70,7 @@ async def process_event(data: dict) -> JSONResponse:
     else:
         await post_to_works(
             payload=set_text_payload(
-                "죄송해요, 지금은 봇 개발 중이라 에러가 발생했나봐요. 시작하기 라고 입력해주세요!"
+                "죄송해요, 에러가 발생했나봐요. 시작하기 라고 입력해주세요!"
             ),
             id=user_id,
         )
