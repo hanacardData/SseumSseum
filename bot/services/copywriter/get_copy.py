@@ -19,26 +19,20 @@ class SuggestedToneStrategy(BaseModel):
     tone: str
     strategy: str
     tone_reasoning: str = Field(default="")
-    tone_thoughts: str = Field(default="")
     strategy_reasoning: str = Field(default="")
-    strategy_thoughts: str = Field(default="")
 
     @field_validator("tone")
     def validate_tone(cls, v, values):
         if v not in COPY_TONE_MAPPER:
             v = random.choice(list(COPY_TONE_MAPPER.keys()))
-            values["tone_reasoning"] = f"손님이 공감할 수 있도록 {v} 톤을 사용했어요."
-            values["tone_thoughts"] = f"음.. {v} 느낌을 전달하려면..."
+            values["tone_reasoning"] = f"음.. {v} 느낌을 전달하려면..."
         return v
 
     @field_validator("strategy")
     def validate_strategy(cls, v, values):
         if v not in COPY_STRATEGY_MAPPER:
             v = random.choice(list(COPY_STRATEGY_MAPPER.keys()))
-            values["strategy_reasoning"] = (
-                f"손님들의 반응을 이끌어낼수 있도록 {v} 포인트를 사용했어요."
-            )
-            values["strategy_thoughts"] = f"{v} 포인트를 사용한다면..."
+            values["strategy_reasoning"] = f"{v} 포인트를 사용한다면..."
         return v
 
 

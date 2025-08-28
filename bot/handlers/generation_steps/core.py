@@ -73,10 +73,10 @@ async def generate_copy(user_id: str, context: dict) -> None:
     ## 톤과 전략 생성
     tone_strategy = await suggest_tone_strategy(context)
     await post_to_works(
-        payload=set_text_payload(tone_strategy.tone_thoughts), id=user_id
+        payload=set_text_payload(tone_strategy.tone_reasoning), id=user_id
     )
     await post_to_works(
-        payload=set_text_payload(tone_strategy.strategy_thoughts), id=user_id
+        payload=set_text_payload(tone_strategy.strategy_reasoning), id=user_id
     )
 
     ## 카피 생성
@@ -89,7 +89,9 @@ async def generate_copy(user_id: str, context: dict) -> None:
         await failed_message(user_id=user_id)
         return
     await post_to_works(
-        payload=set_text_payload("IMC 가이드라인에 맞게 문구를 변경하는 중이에요."),
+        payload=set_text_payload(
+            "하나카드의 가이드라인에 맞게 문구를 다듬는 중이에요."
+        ),
         id=user_id,
     )
     ## 문구 변경

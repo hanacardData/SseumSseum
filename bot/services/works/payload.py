@@ -1,4 +1,23 @@
+import re
+
 from bot.services.steps_enum import Channel, Purpose, TaskSelection
+
+_IDX_MAP = {0: "하나", 1: "둘", 2: "셋", 3: "넷", 4: "다섯"}
+
+
+def _refine_title(text: str) -> str:
+    return f"(광고)[하나카드] {text}"
+
+
+def _refine_content(text: str) -> str:
+    return (
+        re.sub(r"\s*◆", r"\n◆", text)
+        + "\n◆\n  -\n*************************\n※ 하나카드 고객센터 : 1800-1111\n"
+    )
+
+
+def _set_copy_text(title: str, content: str) -> str:
+    return _refine_title(title) + "\n" + _refine_content(content)
 
 
 def set_text_payload(message: str) -> dict[str, dict[str, str]]:
@@ -147,35 +166,85 @@ def set_restart_button_payload() -> dict[str, dict]:
 
 def set_copy_result_payload(phrases: dict):
     carousel_payload = {"type": "carousel", "contents": []}
-    for key, phrase in phrases.items():
+    for idx, (key, phrase) in enumerate(phrases.items()):
         bubble = {
             "type": "bubble",
             "size": "kilo",
+            "direction": "ltr",
             "header": {
                 "type": "box",
                 "layout": "horizontal",
                 "contents": [
                     {
                         "type": "text",
-                        "text": phrase["title"],
-                        "wrap": True,
-                        "weight": "bold",
+                        "text": f"씀씀이 아이디어 {_IDX_MAP[idx]}",
                         "size": "sm",
-                        "color": "#000000",
+                        "color": "#ffffff",
+                        "weight": "bold",
+                        "align": "center",
                     }
                 ],
+                "backgroundColor": "#008e71",
             },
             "body": {
                 "type": "box",
-                "layout": "horizontal",
+                "layout": "vertical",
                 "contents": [
                     {
                         "type": "text",
-                        "text": phrase["content"],
+                        "text": _refine_title(phrase["title"]),
                         "wrap": True,
                         "size": "sm",
-                        "color": "#000000",
-                    }
+                        "align": "start",
+                        "color": "#333333",
+                        "weight": "bold",
+                    },
+                    {
+                        "type": "text",
+                        "text": _refine_content(phrase["content"]),
+                        "wrap": True,
+                        "size": "sm",
+                        "align": "start",
+                        "color": "#333333",
+                    },
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "margin": "sm",
+                        "backgroundColor": "#ffffff",
+                        "contents": [
+                            {
+                                "type": "box",
+                                "layout": "vertical",
+                                "contents": [
+                                    {
+                                        "type": "text",
+                                        "text": "[이 아이디어의 매력 포인트]",
+                                        "size": "sm",
+                                        "color": "#333333",
+                                        "align": "center",
+                                        "weight": "bold",
+                                    },
+                                    {
+                                        "type": "text",
+                                        "text": f"- 글자 수 {len(phrase['title'] + phrase['content'])} 자",
+                                        "size": "sm",
+                                        "color": "#333333",
+                                        "align": "start",
+                                        "wrap": True,
+                                    },
+                                    {
+                                        "type": "text",
+                                        "text": f"- {phrase['reasoning']}",
+                                        "size": "sm",
+                                        "color": "#333333",
+                                        "align": "start",
+                                        "wrap": True,
+                                    },
+                                ],
+                            },
+                        ],
+                    },
                 ],
             },
             "footer": {
@@ -199,7 +268,9 @@ def set_copy_result_payload(phrases: dict):
                         "text": "복사하기",
                         "action": {
                             "type": "copy",
-                            "copyText": phrase["title"] + " " + phrase["content"],
+                            "copyText": _set_copy_text(
+                                phrase["title"], phrase["content"]
+                            ),
                         },
                         "size": "sm",
                         "align": "center",
@@ -222,35 +293,47 @@ def set_copy_result_payload(phrases: dict):
 
 def set_view_result_payload(phrases: list[dict[str, str]]):
     carousel_payload = {"type": "carousel", "contents": []}
-    for phrase in phrases:
+    for idx, phrase in enumerate(phrases):
         bubble = {
             "type": "bubble",
             "size": "kilo",
+            "direction": "ltr",
             "header": {
                 "type": "box",
                 "layout": "horizontal",
                 "contents": [
                     {
                         "type": "text",
-                        "text": phrase["title"],
-                        "wrap": True,
-                        "weight": "bold",
+                        "text": f"저장한 카피 {_IDX_MAP[idx]}",
                         "size": "sm",
-                        "color": "#000000",
+                        "color": "#ffffff",
+                        "weight": "bold",
+                        "align": "center",
                     }
                 ],
+                "backgroundColor": "#008e71",
             },
             "body": {
                 "type": "box",
-                "layout": "horizontal",
+                "layout": "vertical",
                 "contents": [
                     {
                         "type": "text",
-                        "text": phrase["content"],
+                        "text": _refine_title(phrase["title"]),
                         "wrap": True,
                         "size": "sm",
-                        "color": "#000000",
-                    }
+                        "align": "start",
+                        "color": "#333333",
+                        "weight": "bold",
+                    },
+                    {
+                        "type": "text",
+                        "text": _refine_content(phrase["content"]),
+                        "wrap": True,
+                        "size": "sm",
+                        "align": "start",
+                        "color": "#333333",
+                    },
                 ],
             },
             "footer": {
@@ -262,7 +345,9 @@ def set_view_result_payload(phrases: list[dict[str, str]]):
                         "text": "복사하기",
                         "action": {
                             "type": "copy",
-                            "copyText": phrase["title"] + " " + phrase["content"],
+                            "copyText": _set_copy_text(
+                                phrase["title"], phrase["content"]
+                            ),
                         },
                         "size": "sm",
                         "align": "center",
