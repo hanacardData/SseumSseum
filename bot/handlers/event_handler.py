@@ -7,9 +7,8 @@ from bot.handlers.generation_steps.purpose import handle_purpose_selection_event
 from bot.handlers.generation_steps.target import handle_target_input_event
 from bot.handlers.generation_steps.task_selection import handle_task_selection_event
 from bot.handlers.start import handle_start_event
-from bot.handlers.view import handle_view_event
 from bot.services.db.dml import get_session, insert_log
-from bot.services.steps_enum import COPIES, INITIAL_CONTACT, VIEW, Step
+from bot.services.steps_enum import COPIES, INITIAL_CONTACT, Step
 from bot.services.works.payload import set_text_payload
 from bot.services.works.post_content import post_to_works
 
@@ -50,10 +49,6 @@ async def process_event(data: dict) -> JSONResponse:
     step = session.get("step", None)
     if text == INITIAL_CONTACT or not session or not step:
         await handle_start_event(user_id=user_id)
-        return JSONResponse(status_code=200, content={"status": BotStatus.OK})
-
-    if text == VIEW:
-        await handle_view_event(user_id=user_id)
         return JSONResponse(status_code=200, content={"status": BotStatus.OK})
 
     event_handler_map = {
