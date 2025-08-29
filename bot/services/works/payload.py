@@ -3,6 +3,7 @@ import re
 from bot.services.steps_enum import Channel, Purpose, TaskSelection
 
 _IDX_MAP = {0: "하나", 1: "둘", 2: "셋", 3: "넷", 4: "다섯"}
+_REMARKS = "◆\n  -\n*************************\n※ 하나카드 고객센터 : 1800-1111\n"
 
 
 def _refine_title(text: str) -> str:
@@ -10,14 +11,7 @@ def _refine_title(text: str) -> str:
 
 
 def _refine_content(text: str) -> str:
-    return (
-        re.sub(r"\s*◆", r"\n◆", text)
-        + "\n◆\n  -\n*************************\n※ 하나카드 고객센터 : 1800-1111\n"
-    )
-
-
-def _set_copy_text(title: str, content: str) -> str:
-    return _refine_title(title) + "\n" + _refine_content(content)
+    return re.sub(r"\s*◆", r"\n◆", text)
 
 
 def set_text_payload(message: str) -> dict[str, dict[str, str]]:
@@ -167,6 +161,9 @@ def set_restart_button_payload() -> dict[str, dict]:
 def set_copy_result_payload(phrases: dict):
     carousel_payload = {"type": "carousel", "contents": []}
     for idx, (key, phrase) in enumerate(phrases.items()):
+        _title = _refine_title(phrase["title"])
+        _content = _refine_content(phrase["content"])
+        _copy_text = "\n".join([_title, _content, _REMARKS])
         bubble = {
             "type": "bubble",
             "size": "kilo",
@@ -177,7 +174,7 @@ def set_copy_result_payload(phrases: dict):
                 "contents": [
                     {
                         "type": "text",
-                        "text": f"씀씀이 아이디어 {_IDX_MAP[idx]}",
+                        "text": f"씀씀이 아이디어 {_IDX_MAP[idx]}!",
                         "size": "sm",
                         "color": "#ffffff",
                         "weight": "bold",
@@ -208,6 +205,14 @@ def set_copy_result_payload(phrases: dict):
                         "color": "#333333",
                     },
                     {
+                        "type": "text",
+                        "text": _REMARKS,
+                        "wrap": True,
+                        "size": "sm",
+                        "align": "start",
+                        "color": "#333333",
+                    },
+                    {
                         "type": "box",
                         "layout": "vertical",
                         "margin": "sm",
@@ -227,7 +232,7 @@ def set_copy_result_payload(phrases: dict):
                                     },
                                     {
                                         "type": "text",
-                                        "text": f"- 글자 수 {len(phrase['title'] + phrase['content'])} 자",
+                                        "text": f"- 글자 수 {len(_copy_text)} 자",
                                         "size": "sm",
                                         "color": "#333333",
                                         "align": "start",
@@ -266,12 +271,7 @@ def set_copy_result_payload(phrases: dict):
                     {
                         "type": "text",
                         "text": "복사하기",
-                        "action": {
-                            "type": "copy",
-                            "copyText": _set_copy_text(
-                                phrase["title"], phrase["content"]
-                            ),
-                        },
+                        "action": {"type": "copy", "copyText": _copy_text},
                         "size": "sm",
                         "align": "center",
                         "style": "normal",
@@ -294,6 +294,9 @@ def set_copy_result_payload(phrases: dict):
 def set_view_result_payload(phrases: list[dict[str, str]]):
     carousel_payload = {"type": "carousel", "contents": []}
     for idx, phrase in enumerate(phrases):
+        _title = _refine_title(phrase["title"])
+        _content = _refine_content(phrase["content"])
+        _copy_text = "\n".join([_title, _content, _REMARKS])
         bubble = {
             "type": "bubble",
             "size": "kilo",
@@ -319,7 +322,7 @@ def set_view_result_payload(phrases: list[dict[str, str]]):
                 "contents": [
                     {
                         "type": "text",
-                        "text": _refine_title(phrase["title"]),
+                        "text": _title,
                         "wrap": True,
                         "size": "sm",
                         "align": "start",
@@ -328,7 +331,7 @@ def set_view_result_payload(phrases: list[dict[str, str]]):
                     },
                     {
                         "type": "text",
-                        "text": _refine_content(phrase["content"]),
+                        "text": _content,
                         "wrap": True,
                         "size": "sm",
                         "align": "start",
@@ -345,9 +348,7 @@ def set_view_result_payload(phrases: list[dict[str, str]]):
                         "text": "복사하기",
                         "action": {
                             "type": "copy",
-                            "copyText": _set_copy_text(
-                                phrase["title"], phrase["content"]
-                            ),
+                            "copyText": _copy_text,
                         },
                         "size": "sm",
                         "align": "center",
