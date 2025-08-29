@@ -52,7 +52,7 @@ async def suggest_tone_strategy(task_info: dict) -> SuggestedToneStrategy:
         )
         parsed = parse_json(result)
         if not parsed:
-            logger.error("Failed to parse OpenAI response.")
+            logger.error("Failed to parse OpenAI response in suggest_tone_strategy.")
             raise Exception("Parsing error in OpenAI response.")
         return SuggestedToneStrategy(**parsed)
     except Exception as e:

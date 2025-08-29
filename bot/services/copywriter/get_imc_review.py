@@ -23,7 +23,7 @@ async def refine_copy(copy: str | dict) -> dict:
             logger.error("Failed to parse imc review OpenAI response.")
             parsed = parse_json(copy)
             if not parsed:
-                logger.error("Failed to parse copy OpenAI response.")
+                logger.error("Failed to parse copy OpenAI response in suggest_copy.")
                 raise Exception("Parsing error in OpenAI response.")
         for key, phrase in parsed.items():
             parsed[key]["title"] = phrase["title"].strip('"{}').strip()

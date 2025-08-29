@@ -29,5 +29,5 @@ async def post_to_works(
             response.raise_for_status()
             return
         except (httpx.RequestError, httpx.HTTPStatusError) as e:
-            logger.error(e)
+            logger.error(f"Error to post payload to works: {e}")
             raise

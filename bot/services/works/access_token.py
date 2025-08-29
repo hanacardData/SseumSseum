@@ -65,7 +65,6 @@ class TokenManager:
             token_data = response.json()
             self._access_token = token_data["access_token"]
             self._token_expiry = exp
-            self.logger.info("Access token successfully obtained and cached.")
             return self._access_token
         else:
             self.logger.error(

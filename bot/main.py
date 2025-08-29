@@ -1,21 +1,12 @@
-import logging
-
 from fastapi import FastAPI, Header, HTTPException, Request
 from fastapi.responses import JSONResponse
-from uvicorn.config import LOGGING_CONFIG
 
 from bot.config.settings import settings
 from bot.handlers.event_handler import process_event
+from bot.logger import logger
 from bot.utils.signature import verify_signature
 
 app = FastAPI()
-logger = logging.getLogger(__name__)
-LOGGING_CONFIG["formatters"]["default"]["fmt"] = (
-    "%(asctime)s [%(name)s] %(levelprefix)s %(message)s"
-)
-LOGGING_CONFIG["formatters"]["access"]["fmt"] = (
-    "%(asctime)s [%(name)s] %(levelprefix)s %(message)s"
-)
 
 
 @app.post("/")
