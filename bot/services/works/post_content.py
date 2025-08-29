@@ -16,16 +16,14 @@ async def post_to_works(
     id: str,
     is_channel: bool = False,
 ) -> None:
-    if is_channel:
-        url = CHANNEL_POST_URL.format(channel_id=id)
-    else:
-        url = USER_POST_URL.format(user_id=id)
-
-    headers = set_headers()
-
+    url = (
+        CHANNEL_POST_URL.format(channel_id=id)
+        if is_channel
+        else USER_POST_URL.format(user_id=id)
+    )
     async with httpx.AsyncClient() as client:
         try:
-            response = await client.post(url, headers=headers, json=payload)
+            response = await client.post(url, headers=set_headers(), json=payload)
             response.raise_for_status()
             return
         except (httpx.RequestError, httpx.HTTPStatusError) as e:
