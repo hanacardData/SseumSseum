@@ -1,5 +1,6 @@
 import re
 
+from bot.handlers.generation_steps.messages import CHANNEL_GUIDE, PURPOSE_GUIDE
 from bot.services.steps_enum import Channel, Purpose, TaskSelection
 
 _IDX_MAP = {0: "하나", 1: "둘", 2: "셋", 3: "넷", 4: "다섯"}
@@ -60,7 +61,7 @@ def set_task_selection_image_carousel_payload() -> dict[str, dict]:
     }
 
 
-def set_channel_button_payload(content_text: str) -> dict[str, dict]:
+def set_channel_button_payload(content_text: str = CHANNEL_GUIDE) -> dict[str, dict]:
     return {
         "content": {
             "type": "button_template",
@@ -91,7 +92,9 @@ def set_channel_button_payload(content_text: str) -> dict[str, dict]:
     }
 
 
-def set_campagin_purpose_button_payload(content_text: str) -> dict[str, dict]:
+def set_campagin_purpose_button_payload(
+    content_text: str = PURPOSE_GUIDE,
+) -> dict[str, dict]:
     return {
         "content": {
             "type": "button_template",
