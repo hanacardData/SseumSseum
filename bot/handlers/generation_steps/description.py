@@ -1,7 +1,7 @@
 from bot.handlers.generation_steps.core import generate_copy
 from bot.handlers.generation_steps.messages import DESCRIPTION_GUIDE, WRONG_INPUT
 from bot.services.steps_enum import WRONG_ANSWERS, Step
-from bot.services.works.payload import set_restart_button_payload, set_text_payload
+from bot.services.works.payload import set_text_payload
 from bot.services.works.post_content import post_to_works
 
 
@@ -20,4 +20,3 @@ async def handle_description_input_event(
     context = session["context"]
     context[Step.DESCRIPTION.value] = text
     await generate_copy(user_id=user_id, context=context)
-    await post_to_works(payload=set_restart_button_payload(), id=user_id)

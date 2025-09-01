@@ -38,6 +38,7 @@ async def handle_task_selection_event(user_id: str, session: dict, text: str) ->
             )
         else:
             await post_to_works(payload=set_view_result_payload(_copies), id=user_id)
+            return
     elif text == TaskSelection.FAQ.value:
         await post_to_works(
             payload=set_text_payload("FAQ 기능은 준비중이에요!"),

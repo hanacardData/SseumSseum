@@ -69,9 +69,8 @@ async def process_event(data: dict) -> JSONResponse:
         return JSONResponse(status_code=200, content={"status": BotStatus.OK})
     else:
         await post_to_works(
-            payload=set_text_payload(
-                "죄송해요, 에러가 발생했나봐요. 시작하기 라고 입력해주세요!"
-            ),
+            payload=set_text_payload("죄송해요, 에러가 발생했나봐요, 다시 시작할게요!"),
             id=user_id,
         )
+        await handle_start_event(user_id=user_id)
         return JSONResponse(status_code=200, content={"status": BotStatus.OK})

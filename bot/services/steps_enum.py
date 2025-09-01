@@ -26,7 +26,7 @@ class Channel(str, Enum):
     LMS = "LMS"
     SMS = "SMS"
     TALK = "알림톡"
-    PREV = "생성 단계로 돌아가기"
+    PREV = "작업 선택 단계로 돌아가기"
 
 
 class Purpose(str, Enum):
