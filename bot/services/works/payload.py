@@ -415,3 +415,19 @@ def set_view_result_payload(phrases: list[dict[str, str]]):
             "contents": carousel_payload,
         }
     }
+
+
+def set_restart_button_payload() -> dict[str, dict]:
+    return {
+        "content": {
+            "type": "button_template",
+            "contentText": "새로운 작업을 시작하시겠어요? 시작하시려면 아래버튼을 눌러주세요! 저장하지 않은 모든 내용은 사라져요.",
+            "actions": [
+                {
+                    "type": "message",
+                    "text": "시작하기",
+                    "label": "새로 시작하기",
+                },
+            ],
+        }
+    }

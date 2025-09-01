@@ -9,7 +9,7 @@ from bot.handlers.generation_steps.task_selection import handle_task_selection_e
 from bot.handlers.start import handle_start_event
 from bot.services.db.dml import get_session, insert_log
 from bot.services.steps_enum import COPIES, INITIAL_CONTACT, Step
-from bot.services.works.payload import set_text_payload
+from bot.services.works.payload import set_restart_button_payload, set_text_payload
 from bot.services.works.post_content import post_to_works
 
 
@@ -37,6 +37,10 @@ async def process_event(data: dict) -> JSONResponse:
                 payload=set_text_payload(
                     "마음에 드셨다니 기뻐요! 씀씀이가 이 카피를 기억해둘게요!"
                 ),
+                id=user_id,
+            )
+            await post_to_works(
+                payload=set_restart_button_payload(),
                 id=user_id,
             )
             return JSONResponse(status_code=200, content={"status": BotStatus.OK})
