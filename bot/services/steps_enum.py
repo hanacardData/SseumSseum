@@ -40,3 +40,8 @@ class Purpose(str, Enum):
     SURVEY = "만족도 조사"
     PRODUCT_RECOMMEND = "특정 상품 권유"
     PREV = "채널 선택 단계로 돌아가기"
+
+
+WRONG_ANSWERS: set[str] = {INITIAL_CONTACT} | {
+    m.value for enum in (TaskSelection, Channel, Purpose) for m in enum
+}

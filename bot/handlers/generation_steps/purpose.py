@@ -8,8 +8,9 @@ from bot.services.works.payload import (
 from bot.services.works.post_content import post_to_works
 
 _BACK = "채널선택으로 다시 돌아왔어요!"
-_TARGET = """{purpose} 목적으로 캠페인을 진행하시는군요!
-세번째로, 메시지를 받을 손님에 대해 설명해주세요.
+_REACTION_TO_PURPOSE = "{purpose} 목적으로 캠페인을 진행하시는군요!"
+
+_TARGET = """세번째로, 메시지를 받을 손님에 대해 설명해주세요.
 
 예시)
 - 하나대학교 신입생
@@ -40,7 +41,11 @@ async def handle_purpose_selection_event(
         context[Step.PURPOSE.value] = text
         upsert_session(user_id=user_id, step=Step.PURPOSE.value, context=context)
         await post_to_works(
-            payload=set_text_payload(_TARGET.format(purpose=text)),
+            payload=set_text_payload(_REACTION_TO_PURPOSE.format(purpose=text)),
+            id=user_id,
+        )
+        await post_to_works(
+            payload=set_text_payload(_TARGET),
             id=user_id,
         )
         return
