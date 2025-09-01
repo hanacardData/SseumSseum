@@ -244,7 +244,7 @@ def set_copy_result_payload(phrases: dict):
                 },
                 {
                     "type": "text",
-                    "text": "더 다듬고 싶다면,\n[기억해두기] → [새로 시작하기] → [카피 다듬기]로 도와드려요!",
+                    "text": "\n더 다듬고 싶다면,\n[기억해두기] → [새로 시작하기]\n→ [카피 다듬기]로 도와드려요!",
                     "wrap": True,
                     "size": "sm",
                     "align": "start",
@@ -252,7 +252,7 @@ def set_copy_result_payload(phrases: dict):
                 },
                 {
                     "type": "text",
-                    "text": "새로운 작업을 원하시면,\n[새로 시작하기]를 눌러주세요!",
+                    "text": "\n새로운 작업을 원하시면,\n[새로 시작하기]를 눌러주세요!",
                     "wrap": True,
                     "size": "sm",
                     "align": "start",
