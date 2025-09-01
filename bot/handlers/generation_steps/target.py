@@ -1,5 +1,6 @@
 from bot.handlers.generation_steps.messages import (
     DESCRIPTION_GUIDE,
+    REACTION_TO_TARGET,
     TARGET_GUIDE,
     WRONG_INPUT,
 )
@@ -17,6 +18,7 @@ async def handle_target_input_event(user_id: str, session: dict, text: str) -> N
         await post_to_works(payload=set_text_payload(WRONG_INPUT), id=user_id)
         await post_to_works(payload=set_text_payload(TARGET_GUIDE), id=user_id)
         return
+    await post_to_works(payload=set_text_payload(REACTION_TO_TARGET), id=user_id)
     context = session["context"]
     context[Step.TARGET.value] = text
     upsert_session(user_id=user_id, step=Step.TARGET.value, context=context)
