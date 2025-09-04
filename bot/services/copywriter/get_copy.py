@@ -4,13 +4,13 @@ from pydantic import BaseModel, Field, field_validator
 from retry import retry
 
 from bot.logger import logger
+from bot.services.copywriter.change_str_to_json import parse_json
 from bot.services.copywriter.prompt.copytone import COPY_TONE_MAPPER
 from bot.services.copywriter.prompt.message import MESSAGE_PROPMT
 from bot.services.copywriter.prompt.strategy import COPY_STRATEGY_MAPPER
 from bot.services.copywriter.prompt.tone_strategy_selection import (
     TONE_STRATEGY_SELECTION_PROMPT,
 )
-from bot.services.copywriter.refine_copy import parse_json
 from bot.services.openai_client import get_openai_response
 from bot.services.steps_enum import Step
 
