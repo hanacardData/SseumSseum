@@ -2,6 +2,8 @@ from enum import Enum
 
 INITIAL_CONTACT: str = "시작하기"
 COPIES: str = "copies"
+TONE: str = "tone"
+STRATEGY: str = "strategy"
 
 
 class Step(str, Enum):
