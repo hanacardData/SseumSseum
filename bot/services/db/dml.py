@@ -61,7 +61,7 @@ def insert_log(
                     FROM log
                     WHERE user_id = ?
                     ORDER BY id DESC
-                    LIMIT 1 OFFSET 4
+                    LIMIT 1 OFFSET 100
                 )
             """,
             (user_id, user_id),
@@ -97,7 +97,7 @@ def get_session(user_id: str) -> dict[str, str]:
         }
 
 
-def get_logs(user_id: str, limit: int = 10) -> list[dict[str, str]]:
+def get_logs(user_id: str) -> list[dict[str, str]]:
     """특정 user_id 의 로그 최신순 조회"""
     with sqlite3.connect(DB_PATH) as conn:
         conn.row_factory = sqlite3.Row
@@ -107,9 +107,9 @@ def get_logs(user_id: str, limit: int = 10) -> list[dict[str, str]]:
             SELECT title, content FROM log
             WHERE user_id = ?
             ORDER BY id DESC
-            LIMIT ?
+            LIMIT 9
             """,
-            (user_id, limit),
+            (user_id,),
         )
         rows = cur.fetchall()
 
