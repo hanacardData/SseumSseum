@@ -81,7 +81,7 @@ async def generate_copy(user_id: str, context: dict) -> None:
 
     ## 카피 생성
     suggested_copy = await suggest_copy(
-        task_info=context,
+        context=context,
         tone=tone_strategy.tone,
         strategy=tone_strategy.strategy,
     )
@@ -103,12 +103,16 @@ async def generate_copy(user_id: str, context: dict) -> None:
     ## 카피 결과 전송
     try:
         await post_to_works(
-            payload=set_copy_result_payload(refined_copies),
+            payload=set_copy_result_payload(
+                phrases=refined_copies, channel=context[Step.CHANNEL.value]
+            ),
             id=user_id,
         )
     except Exception as e:
         logger.error(f"Error posting copy result: {e}")
-        logger.error(f"{set_copy_result_payload(refined_copies)}")
+        logger.error(
+            f"{set_copy_result_payload(phrases=refined_copies, channel=context[Step.CHANNEL.value])}"
+        )
         await post_to_works(
             payload=set_text_payload(str(refined_copies["phrases"])),
             id=user_id,

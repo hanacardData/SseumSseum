@@ -104,7 +104,7 @@ def get_logs(user_id: str) -> list[dict[str, str]]:
         cur = conn.cursor()
         cur.execute(
             """
-            SELECT title, content FROM log
+            SELECT title, content, channel FROM log
             WHERE user_id = ?
             ORDER BY id DESC
             LIMIT 9
@@ -119,6 +119,7 @@ def get_logs(user_id: str) -> list[dict[str, str]]:
                 {
                     "title": row["title"],
                     "content": row["content"],
+                    "channel": row["channel"],
                 }
             )
         return results
