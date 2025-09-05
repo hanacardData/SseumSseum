@@ -12,7 +12,7 @@ from bot.services.copywriter.prompt.tone_strategy_selection import (
     TONE_STRATEGY_SELECTION_PROMPT,
 )
 from bot.services.openai_client import get_openai_response
-from bot.services.steps_enum import Step
+from bot.services.steps_enum import Channel, Step
 
 
 class SuggestedToneStrategy(BaseModel):
@@ -63,6 +63,25 @@ async def suggest_tone_strategy(task_info: dict) -> SuggestedToneStrategy:
         )
 
 
+CHANNEL_TITLE_BYTE_MAPPER: dict[str, int] = {
+    Channel.LMS.value: 24,
+    Channel.RCS_LMS.value: 44,
+    Channel.RCS_SMS.value: 24,  # FIXME
+    Channel.TALK.value: 70,
+    Channel.PUSH_PAY.value: 22,
+    Channel.PUSH_MONEY.value: 23,
+}
+
+CHANNEL_CONTENT_BYTE_MAPPER: dict[str, int] = {
+    Channel.LMS.value: 1158,
+    Channel.RCS_LMS.value: 1866,
+    Channel.RCS_SMS.value: 92,  # FIXME
+    Channel.TALK.value: 1866,
+    Channel.PUSH_PAY.value: 1211,
+    Channel.PUSH_MONEY.value: 640,
+}
+
+
 @retry(tries=3, delay=1, backoff=2, exceptions=Exception)
 async def suggest_copy(task_info: dict, tone: str, strategy: str) -> str | None:
     """입력 텍스트에 어울리는 카피를 생성합니다."""
@@ -75,6 +94,8 @@ async def suggest_copy(task_info: dict, tone: str, strategy: str) -> str | None:
         target_customer=task_info[Step.TARGET.value],
         copy_tone=copy_tone_prompt,
         copy_strategy=copy_strategy_prompt,
+        num_title_byte=CHANNEL_TITLE_BYTE_MAPPER[task_info[Step.CHANNEL.value]],
+        num_content_byte=CHANNEL_CONTENT_BYTE_MAPPER[task_info[Step.CHANNEL.value]],
     )
 
     try:
