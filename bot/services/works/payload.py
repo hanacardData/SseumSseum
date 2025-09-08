@@ -145,7 +145,7 @@ def set_copy_result_payload(phrases: dict, channel: str) -> dict:
                                     },
                                     {
                                         "type": "text",
-                                        "text": f"- 글자 수 {len(_copy_text)} 자",
+                                        "text": f"- 글자 수 {len(_copy_text)} 자 ({len(_copy_text.encode())} Byte)",
                                         "size": "sm",
                                         "color": "#333333",
                                         "align": "start",

@@ -9,7 +9,7 @@ _CHANNEL_TITLE_HEADER: dict[str, str] = {
     Channel.RCS_LMS.value: "(광고)[하나카드]",
     Channel.RCS_SMS.value: "(광고)[하나카드]",
     Channel.TALK.value: "[하나카드]",
-    Channel.PUSH_PAY.value: "(광고)[하나카드] (1800-1111)",
+    Channel.PUSH_PAY.value: "(광고)[하나카드](1800-1111)",
     Channel.PUSH_MONEY.value: "(광고)[하나카드](1800-1111)",
 }
 
@@ -23,7 +23,6 @@ _CHANNEL_CONTENT_FOOTER: dict[str, str] = {
 준법심의 S-00-0000 (2025.00.00~2025.00.00)""",
     Channel.RCS_LMS.value: """
 *************************
-※ 유의사항
 -
 ▶
 
