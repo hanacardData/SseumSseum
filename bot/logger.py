@@ -21,7 +21,10 @@ def init_logger() -> logging.Logger:
     logger.addHandler(console_handler)
 
     file_handler = RotatingFileHandler(
-        LOG_DIR / "app.log", maxBytes=5 * 1024 * 1024, backupCount=5
+        LOG_DIR / "app.log",
+        maxBytes=5 * 1024 * 1024,
+        backupCount=5,
+        encoding="utf-8",
     )
     file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)
