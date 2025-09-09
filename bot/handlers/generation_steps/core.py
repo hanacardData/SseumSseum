@@ -4,7 +4,7 @@ from bot.logger import logger
 from bot.services.copywriter.get_copy import suggest_copy, suggest_tone_strategy
 from bot.services.copywriter.get_imc_review import refine_copy
 from bot.services.db.dml import upsert_session
-from bot.services.steps_enum import COPIES, Step
+from bot.services.steps_enum import COPIES, STRATEGY, TONE, Step
 from bot.services.works.payload import set_copy_result_payload, set_text_payload
 from bot.services.works.post_content import post_to_works
 
@@ -81,7 +81,7 @@ async def generate_copy(user_id: str, context: dict) -> None:
 
     ## 카피 생성
     suggested_copy = await suggest_copy(
-        task_info=context,
+        context=context,
         tone=tone_strategy.tone,
         strategy=tone_strategy.strategy,
     )
@@ -103,16 +103,23 @@ async def generate_copy(user_id: str, context: dict) -> None:
     ## 카피 결과 전송
     try:
         await post_to_works(
-            payload=set_copy_result_payload(refined_copies),
+            payload=set_copy_result_payload(
+                phrases=refined_copies, channel=context[Step.CHANNEL.value]
+            ),
             id=user_id,
         )
     except Exception as e:
         logger.error(f"Error posting copy result: {e}")
-        logger.error(f"{set_copy_result_payload(refined_copies)}")
+        logger.error(
+            f"{set_copy_result_payload(phrases=refined_copies, channel=context[Step.CHANNEL.value])}"
+        )
         await post_to_works(
             payload=set_text_payload(str(refined_copies["phrases"])),
             id=user_id,
         )
+
+    context[TONE] = tone_strategy.tone
+    context[STRATEGY] = tone_strategy.strategy
     context[COPIES] = refined_copies
     upsert_session(user_id=user_id, step=Step.END.value, context=context)
     return

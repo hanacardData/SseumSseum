@@ -1,8 +1,8 @@
 import json
 
 from bot.logger import logger
+from bot.services.copywriter.change_str_to_json import parse_json
 from bot.services.copywriter.prompt.imc import REVIEW_PROMPT
-from bot.services.copywriter.refine_copy import parse_json
 from bot.services.openai_client import get_openai_response
 
 

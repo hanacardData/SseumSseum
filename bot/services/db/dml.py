@@ -28,6 +28,8 @@ def insert_log(
     purpose: str,
     target: str,
     description: str,
+    tone: str,
+    strategy: str,
     title: str,
     content: str,
 ):
@@ -35,10 +37,20 @@ def insert_log(
         cur = conn.cursor()
         cur.execute(
             """
-            INSERT INTO log (user_id, channel, purpose, target, description, title, content)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO log (user_id, channel, purpose, target, description, tone, strategy, title, content)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
-            (user_id, channel, purpose, target, description, title, content),
+            (
+                user_id,
+                channel,
+                purpose,
+                target,
+                description,
+                tone,
+                strategy,
+                title,
+                content,
+            ),
         )
         cur.execute(
             """
@@ -49,7 +61,7 @@ def insert_log(
                     FROM log
                     WHERE user_id = ?
                     ORDER BY id DESC
-                    LIMIT 1 OFFSET 4
+                    LIMIT 1 OFFSET 100
                 )
             """,
             (user_id, user_id),
@@ -85,19 +97,19 @@ def get_session(user_id: str) -> dict[str, str]:
         }
 
 
-def get_logs(user_id: str, limit: int = 10) -> list[dict[str, str]]:
+def get_logs(user_id: str) -> list[dict[str, str]]:
     """특정 user_id 의 로그 최신순 조회"""
     with sqlite3.connect(DB_PATH) as conn:
         conn.row_factory = sqlite3.Row
         cur = conn.cursor()
         cur.execute(
             """
-            SELECT title, content FROM log
+            SELECT title, content, channel FROM log
             WHERE user_id = ?
             ORDER BY id DESC
-            LIMIT ?
+            LIMIT 9
             """,
-            (user_id, limit),
+            (user_id,),
         )
         rows = cur.fetchall()
 
@@ -107,6 +119,7 @@ def get_logs(user_id: str, limit: int = 10) -> list[dict[str, str]]:
                 {
                     "title": row["title"],
                     "content": row["content"],
+                    "channel": row["channel"],
                 }
             )
         return results

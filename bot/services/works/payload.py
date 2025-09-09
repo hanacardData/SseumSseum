@@ -1,18 +1,10 @@
-import re
-
 from bot.handlers.generation_steps.messages import CHANNEL_GUIDE, PURPOSE_GUIDE
 from bot.services.steps_enum import Channel, Purpose, TaskSelection
-
-_IDX_MAP = {0: "하나", 1: "둘", 2: "셋", 3: "넷", 4: "다섯"}
-_REMARKS = "◆\n  -\n*************************\n※ 하나카드 고객센터 : 1800-1111\n"
-
-
-def _refine_title(text: str) -> str:
-    return f"(광고)[하나카드] {text}"
-
-
-def _refine_content(text: str) -> str:
-    return re.sub(r"\s*◆", r"\n◆", text)
+from bot.services.works.set_payload_header_footer import (
+    IDX_MAP,
+    set_content_footer,
+    set_title_header,
+)
 
 
 def set_text_payload(message: str) -> dict[str, dict[str, str]]:
@@ -87,12 +79,12 @@ def set_campagin_purpose_button_payload(
     }
 
 
-def set_copy_result_payload(phrases: dict):
+def set_copy_result_payload(phrases: dict, channel: str) -> dict:
     carousel_payload = {"type": "carousel", "contents": []}
     for idx, (key, phrase) in enumerate(phrases.items()):
-        _title = _refine_title(phrase["title"])
-        _content = _refine_content(phrase["content"])
-        _copy_text = "\n".join([_title, _content, _REMARKS])
+        _title = set_title_header(phrase["title"], channel)
+        _content = set_content_footer(phrase["content"], channel)
+        _copy_text = "\n".join([_title, _content])
         bubble = {
             "type": "bubble",
             "size": "kilo",
@@ -103,7 +95,7 @@ def set_copy_result_payload(phrases: dict):
                 "contents": [
                     {
                         "type": "text",
-                        "text": f"씀씀이 아이디어 {_IDX_MAP[idx]}!",
+                        "text": f"씀씀이 아이디어 {IDX_MAP[idx]}!",
                         "size": "sm",
                         "color": "#ffffff",
                         "weight": "bold",
@@ -118,7 +110,7 @@ def set_copy_result_payload(phrases: dict):
                 "contents": [
                     {
                         "type": "text",
-                        "text": _refine_title(phrase["title"]),
+                        "text": _title,
                         "wrap": True,
                         "size": "sm",
                         "align": "start",
@@ -127,15 +119,7 @@ def set_copy_result_payload(phrases: dict):
                     },
                     {
                         "type": "text",
-                        "text": _refine_content(phrase["content"]),
-                        "wrap": True,
-                        "size": "sm",
-                        "align": "start",
-                        "color": "#333333",
-                    },
-                    {
-                        "type": "text",
-                        "text": _REMARKS,
+                        "text": _content,
                         "wrap": True,
                         "size": "sm",
                         "align": "start",
@@ -161,7 +145,7 @@ def set_copy_result_payload(phrases: dict):
                                     },
                                     {
                                         "type": "text",
-                                        "text": f"- 글자 수 {len(_copy_text)} 자",
+                                        "text": f"- 글자 수 {len(_copy_text)} 자 ({len(_copy_text.encode())} Byte)",
                                         "size": "sm",
                                         "color": "#333333",
                                         "align": "start",
@@ -290,9 +274,9 @@ def set_copy_result_payload(phrases: dict):
 def set_view_result_payload(phrases: list[dict[str, str]]):
     carousel_payload = {"type": "carousel", "contents": []}
     for idx, phrase in enumerate(phrases):
-        _title = _refine_title(phrase["title"])
-        _content = _refine_content(phrase["content"])
-        _copy_text = "\n".join([_title, _content, _REMARKS])
+        _title = set_title_header(phrase["title"], phrase["channel"])
+        _content = set_content_footer(phrase["content"], phrase["channel"])
+        _copy_text = "\n".join([_title, _content])
         bubble = {
             "type": "bubble",
             "size": "kilo",
@@ -303,7 +287,7 @@ def set_view_result_payload(phrases: list[dict[str, str]]):
                 "contents": [
                     {
                         "type": "text",
-                        "text": f"저장한 카피 {_IDX_MAP[idx]}",
+                        "text": f"저장한 카피 {IDX_MAP[idx]}",
                         "size": "sm",
                         "color": "#ffffff",
                         "weight": "bold",

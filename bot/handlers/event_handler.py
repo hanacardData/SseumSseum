@@ -8,7 +8,7 @@ from bot.handlers.generation_steps.target import handle_target_input_event
 from bot.handlers.generation_steps.task_selection import handle_task_selection_event
 from bot.handlers.start import handle_start_event
 from bot.services.db.dml import get_session, insert_log
-from bot.services.steps_enum import COPIES, INITIAL_CONTACT, Step
+from bot.services.steps_enum import COPIES, INITIAL_CONTACT, STRATEGY, TONE, Step
 from bot.services.works.payload import set_restart_button_payload, set_text_payload
 from bot.services.works.post_content import post_to_works
 
@@ -30,6 +30,8 @@ async def process_event(data: dict) -> JSONResponse:
                 purpose=session["context"][Step.PURPOSE.value],
                 target=session["context"][Step.TARGET.value],
                 description=session["context"][Step.DESCRIPTION.value],
+                tone=session["context"][TONE],
+                strategy=session["context"][STRATEGY],
                 title=save_copy["title"],
                 content=save_copy["content"],
             )

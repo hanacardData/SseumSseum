@@ -2,6 +2,8 @@ from enum import Enum
 
 INITIAL_CONTACT: str = "시작하기"
 COPIES: str = "copies"
+TONE: str = "tone"
+STRATEGY: str = "strategy"
 
 
 class Step(str, Enum):
@@ -22,10 +24,12 @@ class TaskSelection(str, Enum):
 
 
 class Channel(str, Enum):
-    PUSH = "PUSH 메시지"
     LMS = "LMS"
-    SMS = "SMS"
+    RCS_LMS = "RCS (LMS)"
+    RCS_SMS = "RCS (SMS)"
     TALK = "알림톡"
+    PUSH_PAY = "PUSH (하나페이)"
+    PUSH_MONEY = "PUSH (하나머니)"
     PREV = "작업 선택 단계로 돌아가기"
 
 
