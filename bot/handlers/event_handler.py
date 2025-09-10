@@ -5,8 +5,8 @@ from bot.handlers.generation_steps.channel import handle_channel_selection_event
 from bot.handlers.generation_steps.description import handle_description_input_event
 from bot.handlers.generation_steps.purpose import handle_purpose_selection_event
 from bot.handlers.generation_steps.target import handle_target_input_event
-from bot.handlers.generation_steps.task_selection import handle_task_selection_event
 from bot.handlers.start import handle_start_event
+from bot.handlers.task_selection import handle_task_selection_event
 from bot.services.db.dml import get_session, insert_log
 from bot.services.steps_enum import COPIES, INITIAL_CONTACT, STRATEGY, TONE, Step
 from bot.services.works.payloads.payload import (
