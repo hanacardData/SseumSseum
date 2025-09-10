@@ -19,6 +19,7 @@ class Step(str, Enum):
 
     ### FIX Steps
     FIX_TARGET = "fix_target"
+    MANUAL_FIX = "manual_fix"
 
 
 class TaskSelection(str, Enum):
