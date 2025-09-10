@@ -1,6 +1,6 @@
 from bot.services.db.dml import upsert_session
 from bot.services.steps_enum import Step
-from bot.services.works.payload import (
+from bot.services.works.payloads.payload import (
     set_task_selection_image_carousel_payload,
     set_text_payload,
 )

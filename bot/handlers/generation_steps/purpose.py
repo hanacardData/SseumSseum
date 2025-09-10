@@ -6,7 +6,7 @@ from bot.handlers.generation_steps.messages import (
 )
 from bot.services.db.dml import upsert_session
 from bot.services.steps_enum import Purpose, Step
-from bot.services.works.payload import (
+from bot.services.works.payloads.payload import (
     set_campagin_purpose_button_payload,
     set_channel_button_payload,
     set_text_payload,
@@ -44,6 +44,10 @@ async def handle_purpose_selection_event(
         return
 
     await post_to_works(
-        payload=set_campagin_purpose_button_payload(content_text=WRONG_INPUT),
+        payload=set_text_payload(WRONG_INPUT),
+        id=user_id,
+    )
+    await post_to_works(
+        payload=set_campagin_purpose_button_payload(),
         id=user_id,
     )

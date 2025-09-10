@@ -2,7 +2,7 @@ from bot.handlers.generation_steps.messages import REACTION_TO_CHANNEL, WRONG_IN
 from bot.handlers.start import handle_start_event
 from bot.services.db.dml import upsert_session
 from bot.services.steps_enum import Channel, Step
-from bot.services.works.payload import (
+from bot.services.works.payloads.payload import (
     set_campagin_purpose_button_payload,
     set_channel_button_payload,
     set_text_payload,

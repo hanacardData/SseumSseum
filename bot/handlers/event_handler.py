@@ -9,7 +9,10 @@ from bot.handlers.generation_steps.task_selection import handle_task_selection_e
 from bot.handlers.start import handle_start_event
 from bot.services.db.dml import get_session, insert_log
 from bot.services.steps_enum import COPIES, INITIAL_CONTACT, STRATEGY, TONE, Step
-from bot.services.works.payload import set_restart_button_payload, set_text_payload
+from bot.services.works.payloads.payload import (
+    set_restart_button_payload,
+    set_text_payload,
+)
 from bot.services.works.post_content import post_to_works
 
 

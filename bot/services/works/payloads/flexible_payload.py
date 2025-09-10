@@ -1,82 +1,60 @@
-from bot.handlers.generation_steps.messages import CHANNEL_GUIDE, PURPOSE_GUIDE
-from bot.services.steps_enum import Channel, Purpose, TaskSelection
-from bot.services.works.set_payload_header_footer import (
-    IDX_MAP,
-    set_content_footer,
-    set_title_header,
-)
+import re
+
+from bot.services.steps_enum import Channel
+
+_IDX_MAP = {0: "하나", 1: "둘", 2: "셋", 3: "넷", 4: "다섯"}
+
+_CHANNEL_TITLE_HEADER: dict[str, str] = {
+    Channel.LMS.value: "(광고)[하나카드]",
+    Channel.RCS_LMS.value: "(광고)[하나카드]",
+    Channel.RCS_SMS.value: "(광고)[하나카드]",
+    Channel.TALK.value: "[하나카드]",
+    Channel.PUSH_PAY.value: "(광고)[하나카드](1800-1111)",
+    Channel.PUSH_MONEY.value: "(광고)[하나카드](1800-1111)",
+}
+
+_CHANNEL_CONTENT_FOOTER: dict[str, str] = {
+    Channel.LMS.value: """
+*************************
+※ 유의사항
+-
+▶
+
+준법심의 S-00-0000 (2025.00.00~2025.00.00)""",
+    Channel.RCS_LMS.value: """
+*************************
+-
+▶
+
+준법심의 S-00-0000 (2025.00.00~2025.00.00)
+무료 수신거부 [080-890-1155]""",
+    Channel.RCS_SMS.value: """
+준법심의 S-00-0000(2025.00.00~2025.00.00)
+무료 수신거부 0808901155""",
+    Channel.TALK.value: """
+*************************""",
+    Channel.PUSH_PAY.value: """
+*************************
+-
+▶
+준법심의 S-00-0000 (2025.00.00~2025.00.00)
+* 수신거부 : 전체→설정→알림설정→이벤트/마케팅 알림수신→해제""",
+    Channel.PUSH_MONEY.value: """
+*************************
+-
+▶
+준법심의 S-00-0000 (2025.00.00~2025.00.00)
+수신거부 : 우측 상단 [설정] → 혜택/이벤트 → OFF""",
+}
 
 
-def set_text_payload(message: str) -> dict[str, dict[str, str]]:
-    return {"content": {"type": "text", "text": message}}
+def set_title_header(title: str, channel: str) -> str:
+    return f"{_CHANNEL_TITLE_HEADER[channel]}{title}"
 
 
-def set_task_selection_image_carousel_payload() -> dict[str, dict]:
-    return {
-        "content": {
-            "type": "image_carousel",
-            "columns": [
-                {
-                    "originalContentUrl": "https://i.imgur.com/09crFe5.png",
-                    "action": {
-                        "type": "message",
-                        "label": TaskSelection.COPY_GENERATE.value,
-                        "text": TaskSelection.COPY_GENERATE.value,
-                    },
-                },
-                {
-                    "originalContentUrl": "https://i.imgur.com/QnJNPD9.png",
-                    "action": {
-                        "type": "message",
-                        "label": TaskSelection.COPY_FIX.value,
-                        "text": TaskSelection.COPY_FIX.value,
-                    },
-                },
-                {
-                    "originalContentUrl": "https://i.imgur.com/3j29wQx.png",
-                    "action": {
-                        "type": "message",
-                        "label": TaskSelection.COPY_VIEW.value,
-                        "text": TaskSelection.COPY_VIEW.value,
-                    },
-                },
-                {
-                    "originalContentUrl": "https://i.imgur.com/Fb7wlVX.png",
-                    "action": {
-                        "type": "message",
-                        "label": TaskSelection.FAQ.value,
-                        "text": TaskSelection.FAQ.value,
-                    },
-                },
-            ],
-        }
-    }
-
-
-def set_channel_button_payload(content_text: str = CHANNEL_GUIDE) -> dict[str, dict]:
-    return {
-        "content": {
-            "type": "button_template",
-            "contentText": content_text,
-            "actions": [
-                {"type": "message", "label": channel.value} for channel in Channel
-            ],
-        }
-    }
-
-
-def set_campagin_purpose_button_payload(
-    content_text: str = PURPOSE_GUIDE,
-) -> dict[str, dict]:
-    return {
-        "content": {
-            "type": "button_template",
-            "contentText": content_text,
-            "actions": [
-                {"type": "message", "label": purpose.value} for purpose in Purpose
-            ],
-        }
-    }
+def set_content_footer(content: str, channel: str) -> str:
+    _content = re.sub(r"\s*◆", r"\n◆", content)
+    return f"{_content}{_CHANNEL_CONTENT_FOOTER[channel]}"
 
 
 def set_copy_result_payload(phrases: dict, channel: str) -> dict:
@@ -95,7 +73,7 @@ def set_copy_result_payload(phrases: dict, channel: str) -> dict:
                 "contents": [
                     {
                         "type": "text",
-                        "text": f"씀씀이 아이디어 {IDX_MAP[idx]}!",
+                        "text": f"씀씀이 아이디어 {_IDX_MAP[idx]}!",
                         "size": "sm",
                         "color": "#ffffff",
                         "weight": "bold",
@@ -287,7 +265,7 @@ def set_view_result_payload(phrases: list[dict[str, str]]):
                 "contents": [
                     {
                         "type": "text",
-                        "text": f"저장한 카피 {IDX_MAP[idx]}",
+                        "text": f"저장한 카피 {_IDX_MAP[idx]}",
                         "size": "sm",
                         "color": "#ffffff",
                         "weight": "bold",
@@ -397,21 +375,5 @@ def set_view_result_payload(phrases: list[dict[str, str]]):
             "type": "flex",
             "altText": "카피 불러오기 결과",
             "contents": carousel_payload,
-        }
-    }
-
-
-def set_restart_button_payload() -> dict[str, dict]:
-    return {
-        "content": {
-            "type": "button_template",
-            "contentText": "새로운 작업을 시작하시겠어요? 시작하시려면 아래버튼을 눌러주세요! 저장하지 않은 모든 내용은 사라져요.",
-            "actions": [
-                {
-                    "type": "message",
-                    "text": "시작하기",
-                    "label": "새로 시작하기",
-                },
-            ],
         }
     }
