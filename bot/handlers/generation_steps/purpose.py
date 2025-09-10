@@ -1,4 +1,4 @@
-from bot.handlers.generation_steps.messages import (
+from bot.handlers.messages import (
     BACK_TO_CHANNEL,
     REACTION_TO_PURPOSE,
     TARGET_GUIDE,

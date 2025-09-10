@@ -1,4 +1,4 @@
-from bot.handlers.generation_steps.messages import REACTION_TO_CHANNEL, WRONG_INPUT
+from bot.handlers.messages import REACTION_TO_CHANNEL, WRONG_INPUT
 from bot.handlers.start import handle_start_event
 from bot.services.db.dml import upsert_session
 from bot.services.steps_enum import Channel, Step

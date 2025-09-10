@@ -1,4 +1,4 @@
-from bot.handlers.generation_steps.messages import (
+from bot.handlers.messages import (
     DESCRIPTION_GUIDE,
     REACTION_TO_TARGET,
     TARGET_GUIDE,

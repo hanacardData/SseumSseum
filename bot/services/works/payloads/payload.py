@@ -1,4 +1,4 @@
-from bot.handlers.generation_steps.messages import (
+from bot.handlers.messages import (
     CHANNEL_GUIDE,
     PURPOSE_GUIDE,
     RESTART_GUIDE,
