@@ -1,6 +1,7 @@
 from fastapi.responses import JSONResponse
 
 from bot.handlers.bot_status import BotStatus
+from bot.handlers.fix_steps.fix_target_select import handle_fix_target_selection_event
 from bot.handlers.generation_steps.channel import handle_channel_selection_event
 from bot.handlers.generation_steps.description import handle_description_input_event
 from bot.handlers.generation_steps.purpose import handle_purpose_selection_event
@@ -66,7 +67,8 @@ async def process_event(data: dict) -> JSONResponse:
 
     event_handler_map = {
         Step.START.value: handle_task_selection_event,
-        Step.TASK_SELECTION.value: handle_channel_selection_event,
+        Step.COPY_GENERATION.value: handle_channel_selection_event,
+        Step.COPY_FIX.value: handle_fix_target_selection_event,
         Step.CHANNEL.value: handle_purpose_selection_event,
         Step.PURPOSE.value: handle_target_input_event,
         Step.TARGET.value: handle_description_input_event,

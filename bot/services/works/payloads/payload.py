@@ -1,9 +1,10 @@
 from bot.handlers.messages import (
     CHANNEL_GUIDE,
+    FIX_TARGET_GUIDE,
     PURPOSE_GUIDE,
     RESTART_GUIDE,
 )
-from bot.services.steps_enum import Channel, Purpose, TaskSelection
+from bot.services.steps_enum import Channel, CopyFixTarget, Purpose, TaskSelection
 
 
 def set_text_payload(message: str) -> dict[str, dict[str, str]]:
@@ -87,6 +88,19 @@ def set_restart_button_payload() -> dict[str, dict]:
                     "text": "시작하기",
                     "label": "새로 시작하기",
                 },
+            ],
+        }
+    }
+
+
+def set_copy_fix_target_payload() -> dict[str, str]:
+    return {
+        "content": {
+            "type": "button_template",
+            "contentText": FIX_TARGET_GUIDE,
+            "actions": [
+                {"type": "message", "label": fix_target.value}
+                for fix_target in CopyFixTarget
             ],
         }
     }

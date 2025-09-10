@@ -26,7 +26,9 @@ async def handle_purpose_selection_event(
         context.pop(Step.CHANNEL.value, None)
         await post_to_works(payload=set_text_payload(BACK_TO_CHANNEL), id=user_id)
         await post_to_works(payload=set_channel_button_payload(), id=user_id)
-        upsert_session(user_id=user_id, step=Step.TASK_SELECTION.value, context=context)
+        upsert_session(
+            user_id=user_id, step=Step.COPY_GENERATION.value, context=context
+        )
         return
 
     if text in Purpose._value2member_map_:

@@ -8,12 +8,17 @@ STRATEGY: str = "strategy"
 
 class Step(str, Enum):
     START = "start"
-    TASK_SELECTION = "task_selection"
+    COPY_GENERATION = "copy_generation"
+    COPY_FIX = "copy_fix"
+    ### Generation steps
     CHANNEL = "channel"
     PURPOSE = "purpose"
     TARGET = "target"
     DESCRIPTION = "description"
     END = "end"
+
+    ### FIX Steps
+    FIX_TARGET = "fix_target"
 
 
 class TaskSelection(str, Enum):
