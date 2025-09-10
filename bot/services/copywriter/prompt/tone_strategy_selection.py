@@ -18,9 +18,9 @@ tone과 strategy는 반드시 아래 목록 중 하나만 출력해야 합니다
 tone, strategy, tone_reasoning, strategy_reasoning 외에는 다른 설명이나 텍스트를 출력하지 마십시오.
 
 {{
-    "tone": "{{ 선택된 톤 }}",
-    "strategy": "{{ 선택된 전략 }}",
-    "tone_reasoning": "{{ 톤 선택 과정의 이유}}",
-    "strategy_reasoning": "{{ 전략 선택 과정의 이유 }}"
+    "tone": "{{선택된 톤}}",
+    "strategy": "{{선택된 전략}}",
+    "tone_reasoning": "{{톤 선택 과정의 이유}}",
+    "strategy_reasoning": "{{전략 선택 과정의 이유}}"
 }}
 """
