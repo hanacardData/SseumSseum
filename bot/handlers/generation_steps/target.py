@@ -1,4 +1,4 @@
-from bot.handlers.generation_steps.messages import (
+from bot.handlers.messages import (
     DESCRIPTION_GUIDE,
     REACTION_TO_TARGET,
     TARGET_GUIDE,
@@ -6,7 +6,7 @@ from bot.handlers.generation_steps.messages import (
 )
 from bot.services.db.dml import upsert_session
 from bot.services.steps_enum import WRONG_ANSWERS, Step
-from bot.services.works.payload import set_text_payload
+from bot.services.works.payloads.payload import set_text_payload
 from bot.services.works.post_content import post_to_works
 
 

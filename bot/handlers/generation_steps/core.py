@@ -5,7 +5,8 @@ from bot.services.copywriter.get_copy import suggest_copy, suggest_tone_strategy
 from bot.services.copywriter.get_imc_review import refine_copy
 from bot.services.db.dml import upsert_session
 from bot.services.steps_enum import COPIES, STRATEGY, TONE, Step
-from bot.services.works.payload import set_copy_result_payload, set_text_payload
+from bot.services.works.payloads.flexible_payload import set_copy_result_payload
+from bot.services.works.payloads.payload import set_text_payload
 from bot.services.works.post_content import post_to_works
 
 _TEXTS_FOR_GREETING = [

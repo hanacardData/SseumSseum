@@ -1,4 +1,4 @@
-from bot.handlers.generation_steps.messages import (
+from bot.handlers.messages import (
     BACK_TO_CHANNEL,
     REACTION_TO_PURPOSE,
     TARGET_GUIDE,
@@ -6,7 +6,7 @@ from bot.handlers.generation_steps.messages import (
 )
 from bot.services.db.dml import upsert_session
 from bot.services.steps_enum import Purpose, Step
-from bot.services.works.payload import (
+from bot.services.works.payloads.payload import (
     set_campagin_purpose_button_payload,
     set_channel_button_payload,
     set_text_payload,
@@ -26,7 +26,9 @@ async def handle_purpose_selection_event(
         context.pop(Step.CHANNEL.value, None)
         await post_to_works(payload=set_text_payload(BACK_TO_CHANNEL), id=user_id)
         await post_to_works(payload=set_channel_button_payload(), id=user_id)
-        upsert_session(user_id=user_id, step=Step.TASK_SELECTION.value, context=context)
+        upsert_session(
+            user_id=user_id, step=Step.COPY_GENERATION.value, context=context
+        )
         return
 
     if text in Purpose._value2member_map_:
@@ -44,6 +46,10 @@ async def handle_purpose_selection_event(
         return
 
     await post_to_works(
-        payload=set_campagin_purpose_button_payload(content_text=WRONG_INPUT),
+        payload=set_text_payload(WRONG_INPUT),
+        id=user_id,
+    )
+    await post_to_works(
+        payload=set_campagin_purpose_button_payload(),
         id=user_id,
     )

@@ -8,12 +8,18 @@ STRATEGY: str = "strategy"
 
 class Step(str, Enum):
     START = "start"
-    TASK_SELECTION = "task_selection"
+    COPY_GENERATION = "copy_generation"
+    COPY_FIX = "copy_fix"
+    ### Generation steps
     CHANNEL = "channel"
     PURPOSE = "purpose"
     TARGET = "target"
     DESCRIPTION = "description"
     END = "end"
+
+    ### FIX Steps
+    FIX_TARGET = "fix_target"
+    MANUAL_FIX = "manual_fix"
 
 
 class TaskSelection(str, Enum):
@@ -49,3 +55,9 @@ class Purpose(str, Enum):
 WRONG_ANSWERS: set[str] = {INITIAL_CONTACT} | {
     m.value for enum in (TaskSelection, Channel, Purpose) for m in enum
 }
+
+
+class CopyFixTarget(str, Enum):
+    SAVED = "저장된 카피 선택하기"
+    NEW = "직접 입력하기"
+    PREV = "작업 선택 단계로 돌아가기"
