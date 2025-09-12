@@ -23,7 +23,7 @@ async def handle_fix_target_selection_event(
         upsert_session(user_id=user_id, step=Step.MANUAL_FIX.value, context=context)
         await post_to_works(
             payload=set_text_payload(
-                "직접 수정을 원하시는 군요! 입력해주시면 카피를 수정해드릴게요"
+                "직접 수정을 원하시는군요! 입력해주시면 카피를 수정해드릴게요."
             ),
             id=user_id,
         )
