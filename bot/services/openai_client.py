@@ -14,7 +14,7 @@ async def get_openai_response(
 ) -> str:
     try:
         response = await client.responses.create(
-            model="gpt-4.1",
+            model="gpt-4o",
             instructions=prompt,
             input=input,
         )
