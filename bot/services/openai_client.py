@@ -36,9 +36,9 @@ async def get_openai_completion_response(
                 {"role": "system", "content": prompt},
                 {"role": "user", "content": input},
             ],
-            frequency_penalty=0.6,  # 반복 줄임
-            presence_penalty=0.8,  # 새로운 표현 유도
-            temperature=1.0,  # 창의성 정도 (0=결정적, 1=창의적)
+            frequency_penalty=0.4,  # 반복 줄임
+            presence_penalty=0.4,  # 새로운 표현 유도
+            temperature=0.6,  # 창의성 정도 (0=결정적, 1=창의적)
         )
 
         return response.choices[0].message.content.strip()
