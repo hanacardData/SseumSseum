@@ -41,31 +41,61 @@ REVIEW_PROMPT: str = """
 - 하나카드 IMC 가이드에 따른 용어 통일, 브랜드 표기 규칙, 날짜/시간/금액 표기 규칙을 반드시 적용합니다.
 - 불필요한 이모지, 장황한 표현, 비표준 용어는 모두 제거 및 수정합니다.
 
-# 입력 예시:
+# 입력 형식 예시:
 {
   "phrase1": {
-    "title": "지금 아니면 끝! 혜택 받아요!",
-    "content": "하나카드로 결제하면 혜택이 있습니다. 자세한 사항은 콜센터로 문의하시기 바랍니다.",
-    "reasoning": "깔끔한 톤으로 명확히 말해요.",
+    "title": "...",
+    "content": "...",
+    "reasoning": "..."
   },
   "phrase2": {
-    "title": "하나 Pay 이벤트 안내",
-    "content": "하나페이 앱에서 이벤트를 확인하세요.",
-    "reasoning": "단순하게 손님의 행동을 유도해요.",
+    "title": "...",
+    "content": "...",
+    "reasoning": "..."
+  },
+  "phrase3": {
+    "title": "...",
+    "content": "...",
+    "reasoning": "..."
+  },
+  "phrase4": {
+    "title": "...",
+    "content": "...",
+    "reasoning": "..."
+  },
+    "phrase5": {
+    "title": "...",
+    "content": "...",
+    "reasoning": "..."
   }
 }
 
-# 출력 예시:
+# 출력 형식 예시:
 {
   "phrase1": {
-    "title": "지금이 기회! 하나카드 혜택 만나보세요",
-    "content": "하나카드로 결제하시면 특별한 혜택을 드립니다. 자세한 내용은 하나카드 고객센터에서 확인하세요.",
-    "reasoning": "깔끔한 톤으로 명확히 말해요.",
+    "title": "...",
+    "content": "...",
+    "reasoning": "..."
   },
   "phrase2": {
-    "title": "하나Pay 이벤트 안내",
-    "content": "하나Pay 앱에서 이벤트 내용을 확인하실 수 있습니다.",
-    "reasoning": "단순하게 손님의 행동을 유도해요.",
+    "title": "...",
+    "content": "...",
+    "reasoning": "..."
+  },
+  "phrase3": {
+    "title": "...",
+    "content": "...",
+    "reasoning": "..."
+  },
+  "phrase4": {
+    "title": "...",
+    "content": "...",
+    "reasoning": "..."
+  },
+    "phrase5": {
+    "title": "...",
+    "content": "...",
+    "reasoning": "..."
   }
 }
 """

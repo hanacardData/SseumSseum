@@ -49,7 +49,7 @@ async def failed_message(user_id: str) -> None:
     await post_to_works(
         payload=set_text_payload(
             "카피 생성에 실패했어요. 다시 시도해주세요."
-            + "오류가 반복된다면 데이터 사업부에 문의해주세요."
+            + " 오류가 반복된다면 데이터 사업부에 문의해주세요."
         ),
         id=user_id,
     )
