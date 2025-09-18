@@ -13,12 +13,18 @@ async def get_openai_response(
     input: str,
 ) -> str:
     try:
-        response = await client.responses.create(
+        response = await client.chat.completions.create(
             model="gpt-4o",
-            instructions=prompt,
-            input=input,
+            messages=[
+                {"role": "system", "content": prompt},
+                {"role": "user", "content": input},
+            ],
+            frequency_penalty=0.6,  # 반복 줄임
+            presence_penalty=0.8,   # 새로운 표현 유도
+            temperature=1.0,   # 창의성 정도 (0=결정적, 1=창의적)
         )
-        return response.output_text.strip()
+
+        return response.choices[0].message.content.strip()
     except APIConnectionError as e:
         logger.error(e)
         raise
