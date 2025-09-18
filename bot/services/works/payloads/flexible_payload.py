@@ -381,121 +381,123 @@ def set_view_result_payload(phrases: list[dict[str, str]]):
 
 def set_manual_fix_payload(phrase: dict[str, str]):
     carousel_payload = {"type": "carousel", "contents": []}
-    bubble = {
-        "type": "bubble",
-        "size": "kilo",
-        "direction": "ltr",
-        "header": {
-            "type": "box",
-            "layout": "horizontal",
-            "contents": [
-                {
-                    "type": "text",
-                    "text": "수정된 카피",
-                    "size": "sm",
-                    "color": "#ffffff",
-                    "weight": "bold",
-                    "align": "center",
-                }
-            ],
-            "backgroundColor": "#008e71",
-        },
-        "body": {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-                {
-                    "type": "text",
-                    "text": phrase["title"],
-                    "wrap": True,
-                    "size": "sm",
-                    "align": "start",
-                    "color": "#333333",
-                    "weight": "bold",
-                },
-                {
-                    "type": "text",
-                    "text": phrase.get("content") or " ",
-                    "wrap": True,
-                    "size": "sm",
-                    "align": "start",
-                    "color": "#333333",
-                },
-            ],
-        },
-        "footer": {
-            "type": "box",
-            "layout": "horizontal",
-            "contents": [
-                {
-                    "type": "text",
-                    "text": "복사하기",
-                    "action": {
-                        "type": "copy",
-                        "copyText": "\n".join([phrase["title"], phrase["content"]]),
+    _title = phrase.get("title") or " "
+    _content = phrase.get("content") or " "
+    carousel_payload["contents"].append(
+        {
+            "type": "bubble",
+            "size": "kilo",
+            "direction": "ltr",
+            "header": {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                    {
+                        "type": "text",
+                        "text": "수정된 카피",
+                        "size": "sm",
+                        "color": "#ffffff",
+                        "weight": "bold",
+                        "align": "center",
+                    }
+                ],
+                "backgroundColor": "#008e71",
+            },
+            "body": {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                    {
+                        "type": "text",
+                        "text": _title,
+                        "wrap": True,
+                        "size": "sm",
+                        "align": "start",
+                        "color": "#333333",
+                        "weight": "bold",
                     },
-                    "size": "sm",
-                    "align": "center",
-                    "style": "normal",
-                    "color": "#157efb",
-                },
-            ],
-        },
-    }
-    carousel_payload["contents"].append(bubble)
-
-    last_bubble = {
-        "type": "bubble",
-        "size": "kilo",
-        "direction": "ltr",
-        "header": {
-            "type": "box",
-            "layout": "horizontal",
-            "contents": [
-                {
-                    "type": "text",
-                    "text": "이제 어떻게 해볼까요?",
-                    "size": "sm",
-                    "color": "#ffffff",
-                    "weight": "bold",
-                    "align": "center",
-                }
-            ],
-            "backgroundColor": "#008e71",
-        },
-        "body": {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-                {
-                    "type": "text",
-                    "text": "추가로 수정을 원하시면 채팅창에 입력해주세요!\n새로운 작업을 원하시면,\n[새로 시작하기]를 눌러주세요!",
-                    "wrap": True,
-                    "size": "sm",
-                    "align": "start",
-                    "color": "#333333",
-                },
-            ],
-        },
-        "footer": {
-            "type": "box",
-            "layout": "horizontal",
-            "contents": [
-                {
-                    "type": "button",
-                    "action": {
-                        "type": "message",
-                        "label": "새로 시작하기",
-                        "text": "시작하기",
+                    {
+                        "type": "text",
+                        "text": _content,
+                        "wrap": True,
+                        "size": "sm",
+                        "align": "start",
+                        "color": "#333333",
                     },
-                    "style": "primary",
-                    "color": "#0e8366",
-                },
-            ],
-        },
-    }
-    carousel_payload["contents"].append(last_bubble)
-
+                ],
+            },
+            "footer": {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                    {
+                        "type": "text",
+                        "text": "복사하기",
+                        "action": {
+                            "type": "copy",
+                            "copyText": "\n".join([_title, _content]),
+                        },
+                        "size": "sm",
+                        "align": "center",
+                        "style": "normal",
+                        "color": "#157efb",
+                    },
+                ],
+            },
+        }
+    )
+    carousel_payload["contents"].append(
+        {
+            "type": "bubble",
+            "size": "kilo",
+            "direction": "ltr",
+            "header": {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                    {
+                        "type": "text",
+                        "text": "이제 어떻게 해볼까요?",
+                        "size": "sm",
+                        "color": "#ffffff",
+                        "weight": "bold",
+                        "align": "center",
+                    }
+                ],
+                "backgroundColor": "#008e71",
+            },
+            "body": {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                    {
+                        "type": "text",
+                        "text": "추가로 수정을 원하시면 채팅창에 입력해주세요!\n새로운 작업을 원하시면,\n[새로 시작하기]를 눌러주세요!",
+                        "wrap": True,
+                        "size": "sm",
+                        "align": "start",
+                        "color": "#333333",
+                    },
+                ],
+            },
+            "footer": {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                    {
+                        "type": "button",
+                        "action": {
+                            "type": "message",
+                            "label": "새로 시작하기",
+                            "text": "시작하기",
+                        },
+                        "style": "primary",
+                        "color": "#0e8366",
+                    },
+                ],
+            },
+        }
+    )
     return {
         "content": {
             "type": "flex",
