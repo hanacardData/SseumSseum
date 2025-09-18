@@ -24,7 +24,7 @@ async def get_openai_response(
         temperature=1.0,   # 창의성 정도 (0=결정적, 1=창의적)
         )
 
-        return [choice.message.content.strip() for choice in response.choices]
+        return response.choices[0].message.content.strip()
     except APIConnectionError as e:
         logger.error(e)
         raise
