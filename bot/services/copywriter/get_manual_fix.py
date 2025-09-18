@@ -7,8 +7,9 @@ from bot.services.openai_client import get_openai_response
 
 
 @retry(tries=3, delay=1, backoff=2, exceptions=Exception)
-async def manual_fix(copy: str) -> dict:
+async def manual_fix(copy: str) -> dict | str | None:
     """copy 를 imc 가이드라인에 따라 수정합니다."""
+    result = None
     try:
         result = await get_openai_response(
             prompt=REVIEW_PROMPT,
@@ -26,4 +27,4 @@ async def manual_fix(copy: str) -> dict:
         return parsed
     except Exception as e:
         logger.error(f"Error in refine copy: {e}")
-        return
+        return result
