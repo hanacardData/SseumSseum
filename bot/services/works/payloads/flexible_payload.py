@@ -415,7 +415,7 @@ def set_manual_fix_payload(phrase: dict[str, str]):
                 },
                 {
                     "type": "text",
-                    "text": phrase["content"],
+                    "text": phrase.get("content") or " ",
                     "wrap": True,
                     "size": "sm",
                     "align": "start",
