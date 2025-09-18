@@ -104,7 +104,7 @@ async def suggest_copy(context: dict, tone: str, strategy: str) -> str | None:
         copy_tone=copy_tone_prompt,
         copy_strategy=copy_strategy_prompt,
         num_title_byte=CHANNEL_TITLE_BYTE_MAPPER[context[Step.CHANNEL.value]],
-        num_min_content_byte=260
+        num_min_content_byte=180
         if context[Step.CHANNEL.value] != Channel.RCS_SMS
         else 80,
         num_content_byte=max(
