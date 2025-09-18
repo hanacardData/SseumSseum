@@ -11,7 +11,10 @@ from bot.services.copywriter.prompt.strategy import COPY_STRATEGY_MAPPER
 from bot.services.copywriter.prompt.tone_strategy_selection import (
     TONE_STRATEGY_SELECTION_PROMPT,
 )
-from bot.services.openai_client import get_openai_response
+from bot.services.openai_client import (
+    get_openai_completion_response,
+    get_openai_response,
+)
 from bot.services.steps_enum import Channel, Purpose, Step
 
 
@@ -102,7 +105,7 @@ async def suggest_copy(context: dict, tone: str, strategy: str) -> str | None:
     )
 
     try:
-        return await get_openai_response(
+        return await get_openai_completion_response(
             prompt="You are a helpful marketer.",
             input=prompt,
         )
