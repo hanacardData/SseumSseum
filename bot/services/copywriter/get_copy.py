@@ -7,6 +7,7 @@ from bot.logger import logger
 from bot.services.copywriter.change_str_to_json import parse_json
 from bot.services.copywriter.prompt.copytone import COPY_TONE_MAPPER
 from bot.services.copywriter.prompt.message import MESSAGE_PROPMT
+from bot.services.copywriter.prompt.purpose import PURPOSE_MAPPER
 from bot.services.copywriter.prompt.strategy import COPY_STRATEGY_MAPPER
 from bot.services.copywriter.prompt.tone_strategy_selection import (
     TONE_STRATEGY_SELECTION_PROMPT,
@@ -93,7 +94,7 @@ async def suggest_copy(context: dict, tone: str, strategy: str) -> str | None:
         -506 if context[Step.PURPOSE.value] == Purpose.CARD_ISSUE.value else 0
     )
     prompt = MESSAGE_PROPMT.format(
-        campaign_purpose=context[Step.PURPOSE.value],
+        campaign_purpose=PURPOSE_MAPPER[context[Step.PURPOSE.value]],
         campaign_description=context[Step.DESCRIPTION.value],
         target_customer=context[Step.TARGET.value],
         copy_tone=copy_tone_prompt,
