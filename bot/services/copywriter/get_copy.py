@@ -6,7 +6,7 @@ from retry import retry
 from bot.logger import logger
 from bot.services.copywriter.change_str_to_json import parse_json
 from bot.services.copywriter.prompt.copytone import COPY_TONE_MAPPER
-from bot.services.copywriter.prompt.message import MESSAGE_PROPMT
+from bot.services.copywriter.prompt.message import MESSAGE_INPUT
 from bot.services.copywriter.prompt.purpose import PURPOSE_MAPPER
 from bot.services.copywriter.prompt.strategy import COPY_STRATEGY_MAPPER
 from bot.services.copywriter.prompt.tone_strategy_selection import (
@@ -91,24 +91,33 @@ async def suggest_copy(context: dict, tone: str, strategy: str) -> str | None:
     copy_tone_prompt = COPY_TONE_MAPPER[tone]
     copy_strategy_prompt = COPY_STRATEGY_MAPPER[strategy]
     content_len_penalty: int = (
-        -506 if context[Step.PURPOSE.value] == Purpose.CARD_ISSUE.value else 0
+        -506
+        if context[Step.PURPOSE.value] == Purpose.CARD_ISSUE.value
+        and context[Step.CHANNEL.value]
+        not in [Channel.RCS_SMS.value, Channel.PUSH_MONEY.value]
+        else 0
     )
-    prompt = MESSAGE_PROPMT.format(
+    message_input = MESSAGE_INPUT.format(
         campaign_purpose=PURPOSE_MAPPER[context[Step.PURPOSE.value]],
         campaign_description=context[Step.DESCRIPTION.value],
         target_customer=context[Step.TARGET.value],
         copy_tone=copy_tone_prompt,
         copy_strategy=copy_strategy_prompt,
-        num_title_byte=CHANNEL_TITLE_BYTE_MAPPER[context[Step.CHANNEL.value]]
-        + content_len_penalty,
-        num_content_byte=CHANNEL_CONTENT_BYTE_MAPPER[context[Step.CHANNEL.value]]
-        + content_len_penalty,
+        num_title_byte=CHANNEL_TITLE_BYTE_MAPPER[context[Step.CHANNEL.value]],
+        num_min_content_byte=260
+        if context[Step.CHANNEL.value] != Channel.RCS_SMS
+        else 80,
+        num_content_byte=max(
+            CHANNEL_CONTENT_BYTE_MAPPER[context[Step.CHANNEL.value]]
+            + content_len_penalty,
+            285,
+        ),
     )
 
     try:
         return await get_openai_completion_response(
-            prompt="You are a helpful marketer.",
-            input=prompt,
+            prompt="당신은 하나카드의 마케팅 카피를 생성하는 카피라이터입니다.",
+            input=message_input,
         )
     except Exception as e:
         logger.error(f"Error in suggest_copy: {e}")
