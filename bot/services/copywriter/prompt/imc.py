@@ -57,16 +57,6 @@ REVIEW_PROMPT: str = """
     "title": "...",
     "content": "...",
     "reasoning": "..."
-  },
-  "phrase4": {
-    "title": "...",
-    "content": "...",
-    "reasoning": "..."
-  },
-    "phrase5": {
-    "title": "...",
-    "content": "...",
-    "reasoning": "..."
   }
 }
 
@@ -83,16 +73,6 @@ REVIEW_PROMPT: str = """
     "reasoning": "..."
   },
   "phrase3": {
-    "title": "...",
-    "content": "...",
-    "reasoning": "..."
-  },
-  "phrase4": {
-    "title": "...",
-    "content": "...",
-    "reasoning": "..."
-  },
-    "phrase5": {
     "title": "...",
     "content": "...",
     "reasoning": "..."
