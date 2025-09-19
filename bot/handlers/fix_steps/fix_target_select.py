@@ -22,9 +22,7 @@ async def handle_fix_target_selection_event(
         context[Step.FIX_TARGET.value] = text
         upsert_session(user_id=user_id, step=Step.MANUAL_FIX.value, context=context)
         await post_to_works(
-            payload=set_text_payload(
-                "직접 수정을 원하시는군요! 입력해주시면 카피를 수정해드릴게요."
-            ),
+            payload=set_text_payload("IMC 가이드라인을 적용할 카피를 입력해주세요!"),
             id=user_id,
         )
     elif text == CopyFixTarget.SAVED.value:

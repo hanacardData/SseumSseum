@@ -24,6 +24,9 @@ async def manual_fix(copy: str) -> dict | str | None:
             raise Exception("Failed to parse manual_fix OpenAI response.")
         parsed["title"] = parsed["title"].strip('"{}').strip()
         parsed["content"] = parsed["content"].strip('"{}').strip()
+        prefix = "(광고)[하나카드]"
+        if not parsed["title"].startswith(prefix):
+            parsed["title"] = prefix + " " + parsed["title"]
         return parsed
     except Exception as e:
         logger.error(f"Error in refine copy: {e}")

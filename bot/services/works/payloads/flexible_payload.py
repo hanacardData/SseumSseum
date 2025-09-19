@@ -173,73 +173,74 @@ def set_copy_result_payload(phrases: dict, channel: str) -> dict:
         }
         carousel_payload["contents"].append(bubble)
 
-    last_bubble = {
-        "type": "bubble",
-        "size": "kilo",
-        "direction": "ltr",
-        "header": {
-            "type": "box",
-            "layout": "horizontal",
-            "contents": [
-                {
-                    "type": "text",
-                    "text": "이제 어떻게 해볼까요?",
-                    "size": "sm",
-                    "color": "#ffffff",
-                    "weight": "bold",
-                    "align": "center",
-                }
-            ],
-            "backgroundColor": "#008e71",
-        },
-        "body": {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-                {
-                    "type": "text",
-                    "text": "아이디어가 괜찮으셨다면,\n[기억해두기]를 눌러주세요!",
-                    "wrap": True,
-                    "size": "sm",
-                    "align": "start",
-                    "color": "#333333",
-                },
-                {
-                    "type": "text",
-                    "text": "\n더 다듬고 싶다면,\n[기억해두기] → [새로 시작하기]\n→ [카피 다듬기]로 도와드려요!",
-                    "wrap": True,
-                    "size": "sm",
-                    "align": "start",
-                    "color": "#333333",
-                },
-                {
-                    "type": "text",
-                    "text": "\n새로운 작업을 원하시면,\n[새로 시작하기]를 눌러주세요!",
-                    "wrap": True,
-                    "size": "sm",
-                    "align": "start",
-                    "color": "#333333",
-                },
-            ],
-        },
-        "footer": {
-            "type": "box",
-            "layout": "horizontal",
-            "contents": [
-                {
-                    "type": "button",
-                    "action": {
-                        "type": "message",
-                        "label": "새로 시작하기",
-                        "text": "시작하기",
+    carousel_payload["contents"].append(
+        {
+            "type": "bubble",
+            "size": "kilo",
+            "direction": "ltr",
+            "header": {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                    {
+                        "type": "text",
+                        "text": "이제 어떻게 해볼까요?",
+                        "size": "sm",
+                        "color": "#ffffff",
+                        "weight": "bold",
+                        "align": "center",
+                    }
+                ],
+                "backgroundColor": "#008e71",
+            },
+            "body": {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                    {
+                        "type": "text",
+                        "text": "아이디어가 괜찮으셨다면,\n[기억해두기]를 눌러주세요!",
+                        "wrap": True,
+                        "size": "sm",
+                        "align": "start",
+                        "color": "#333333",
                     },
-                    "style": "primary",
-                    "color": "#0e8366",
-                },
-            ],
-        },
-    }
-    carousel_payload["contents"].append(last_bubble)
+                    {
+                        "type": "text",
+                        "text": "\n더 다듬고 싶다면,\n[기억해두기] → [새로 시작하기]\n→ [카피 다듬기]로 도와드려요!",
+                        "wrap": True,
+                        "size": "sm",
+                        "align": "start",
+                        "color": "#333333",
+                    },
+                    {
+                        "type": "text",
+                        "text": "\n새로운 작업을 원하시면,\n[새로 시작하기]를 눌러주세요!",
+                        "wrap": True,
+                        "size": "sm",
+                        "align": "start",
+                        "color": "#333333",
+                    },
+                ],
+            },
+            "footer": {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                    {
+                        "type": "button",
+                        "action": {
+                            "type": "message",
+                            "label": "새로 시작하기",
+                            "text": "시작하기",
+                        },
+                        "style": "primary",
+                        "color": "#0e8366",
+                    },
+                ],
+            },
+        }
+    )
     return {
         "content": {
             "type": "flex",
@@ -318,57 +319,58 @@ def set_view_result_payload(phrases: list[dict[str, str]]):
         }
         carousel_payload["contents"].append(bubble)
 
-    last_bubble = {
-        "type": "bubble",
-        "size": "kilo",
-        "direction": "ltr",
-        "header": {
-            "type": "box",
-            "layout": "horizontal",
-            "contents": [
-                {
-                    "type": "text",
-                    "text": "이제 어떻게 해볼까요?",
-                    "size": "sm",
-                    "color": "#ffffff",
-                    "weight": "bold",
-                    "align": "center",
-                }
-            ],
-            "backgroundColor": "#008e71",
-        },
-        "body": {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-                {
-                    "type": "text",
-                    "text": "새로운 작업을 원하시면,\n[새로 시작하기]를 눌러주세요!",
-                    "wrap": True,
-                    "size": "sm",
-                    "align": "start",
-                    "color": "#333333",
-                },
-            ],
-        },
-        "footer": {
-            "type": "box",
-            "layout": "horizontal",
-            "contents": [
-                {
-                    "type": "button",
-                    "action": {
-                        "type": "message",
-                        "label": "새로 시작하기",
-                        "text": "시작하기",
+    carousel_payload["contents"].append(
+        {
+            "type": "bubble",
+            "size": "kilo",
+            "direction": "ltr",
+            "header": {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                    {
+                        "type": "text",
+                        "text": "이제 어떻게 해볼까요?",
+                        "size": "sm",
+                        "color": "#ffffff",
+                        "weight": "bold",
+                        "align": "center",
+                    }
+                ],
+                "backgroundColor": "#008e71",
+            },
+            "body": {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                    {
+                        "type": "text",
+                        "text": "새로운 작업을 원하시면,\n[새로 시작하기]를 눌러주세요!",
+                        "wrap": True,
+                        "size": "sm",
+                        "align": "start",
+                        "color": "#333333",
                     },
-                    "style": "primary",
-                    "color": "#0e8366",
-                },
-            ],
-        },
-    }
-    carousel_payload["contents"].append(last_bubble)
+                ],
+            },
+            "footer": {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                    {
+                        "type": "button",
+                        "action": {
+                            "type": "message",
+                            "label": "새로 시작하기",
+                            "text": "시작하기",
+                        },
+                        "style": "primary",
+                        "color": "#0e8366",
+                    },
+                ],
+            },
+        }
+    )
 
     return {
         "content": {
@@ -472,7 +474,7 @@ def set_manual_fix_payload(phrase: dict[str, str]):
                 "contents": [
                     {
                         "type": "text",
-                        "text": "추가로 수정을 원하시면 채팅창에 입력해주세요!\n새로운 작업을 원하시면,\n[새로 시작하기]를 눌러주세요!",
+                        "text": "다른 카피를 가이드라인에 맞게 수정하고 싶으시다면 채팅창에 입력해주세요!\n새로운 작업을 원하시면,\n[새로 시작하기]를 눌러주세요!",
                         "wrap": True,
                         "size": "sm",
                         "align": "start",
