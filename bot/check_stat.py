@@ -15,7 +15,6 @@ def get_dau_mau() -> dict | None:
     with sqlite3.connect(DB_PATH) as conn:
         cur = conn.cursor()
 
-        # 오늘 DAU
         cur.execute(
             """
             SELECT
@@ -27,7 +26,6 @@ def get_dau_mau() -> dict | None:
         )
         dau_row = cur.fetchone()
 
-        # 이번 달 MAU
         cur.execute(
             """
             SELECT
@@ -55,8 +53,7 @@ def get_dau_mau() -> dict | None:
 
 
 def save_log(entry: dict):
-    """DAU/MAU 결과를 JSON 파일에 append"""
-    logs = []
+    logs: list[dict[str, str | int]] = []
     if LOG_FILE.exists():
         with LOG_FILE.open("r", encoding="utf-8") as f:
             try:
