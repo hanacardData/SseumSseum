@@ -1,8 +1,11 @@
+import asyncio
 import json
 import sqlite3
 from pathlib import Path
 
 from bot.services.db.variables import DB_PATH
+from bot.services.works.payloads.payload import set_text_payload
+from bot.services.works.post_content import post_to_works
 
 LOG_FILE = Path("user_log.json")
 
@@ -70,3 +73,9 @@ if __name__ == "__main__":
     if entry:
         save_log(entry)
         print("Saved:", entry)
+        asyncio.run(
+            post_to_works(
+                payload=set_text_payload(str(entry)),
+                id="d7577f96-1fb8-48ef-16cc-038c8d93f08a",
+            )
+        )
