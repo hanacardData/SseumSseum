@@ -22,7 +22,7 @@ def get_dau_mau() -> dict | None:
                 DATE('now', 'localtime') AS ts,
                 COUNT(DISTINCT user_id) AS dau
             FROM session
-            WHERE DATE(created_at) >= DATE('now', '-1 day', 'localtime');
+            WHERE DATE(updated_at) >= DATE('now', '-1 day', 'localtime');
             """
         )
         dau_row = cur.fetchone()
@@ -33,7 +33,7 @@ def get_dau_mau() -> dict | None:
             SELECT
                 COUNT(DISTINCT user_id) AS mau
             FROM session
-            WHERE strftime('%Y-%m', created_at, 'localtime') = strftime('%Y-%m', 'now', 'localtime');
+            WHERE DATE(updated_at) >= DATE('now', '-30 day', 'localtime');
             """
         )
         mau_row = cur.fetchone()
@@ -46,7 +46,7 @@ def get_dau_mau() -> dict | None:
         num_logs_row = cur.fetchone()
         if dau_row and mau_row:
             return {
-                "timestamp": dau_row[0],  # 오늘 날짜
+                "timestamp": dau_row[0],
                 "dau": dau_row[1],
                 "mau": mau_row[0],
                 "nlogs": num_logs_row[0],
