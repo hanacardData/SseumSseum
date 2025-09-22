@@ -35,11 +35,18 @@ def get_dau_mau() -> dict | None:
         )
         mau_row = cur.fetchone()
 
+        cur.execute(
+            """
+            SELECT COUNT(*) FROM log;
+            """
+        )
+        num_logs_row = cur.fetchone()
         if dau_row and mau_row:
             return {
                 "timestamp": dau_row[0],  # 오늘 날짜
                 "dau": dau_row[1],
                 "mau": mau_row[0],
+                "nlogs": num_logs_row[0],
             }
         return None
 
