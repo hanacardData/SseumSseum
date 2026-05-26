@@ -15,13 +15,12 @@
   </table>
 </div>
 
-## 실행 명령어
-개발환경
-```bash
-uvicorn bot.main:app --reload --host 0.0.0.0 --port 5000
-```
-
-운영환경
-```bash
-uvicorn bot.main:app --host 0.0.0.0 --port 5000
+## 인용
+```bibtex
+@article{박도은생성형,
+  title={생성형 AI 기반 카피라이팅: 카피 전략과 톤이 광고 효과에 미치는 영향},
+  author={박도은 and 문상준 and 이하림 and 김물결 and 박상준 and 장순곤},
+  pages={61-68},
+  year={2026},
+}
 ```
